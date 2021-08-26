@@ -1,0 +1,1 @@
+web: gunicorn fypmodule1.wsgi
