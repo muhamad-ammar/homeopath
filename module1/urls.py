@@ -1,9 +1,10 @@
 from os import name
-from module1.views import login
 from django.contrib import admin
 from django.urls import path
-from .views  import signup,login
+from .views import login_view, logout_view, register_view
 urlpatterns = [
-    path('login/',login,name="login" ),
-    path('register/',signup,name="signup" ),
+
+     path('login/', login_view,name="login"),
+    path('logout/', logout_view,name="logout"),
+    path('register/', register_view,name="register"),
 ]
