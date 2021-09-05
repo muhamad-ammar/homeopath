@@ -8,14 +8,14 @@ User = get_user_model()
 
 class RegisterForm(forms.Form):
     username = forms.CharField(label='Username',
-        widget=forms.PasswordInput(
+        widget=forms.TextInput(
             attrs={
                 "class": "form-control",
                 "id": "username"
             }
         ))
     email = forms.EmailField(label='Email',
-        widget=forms.PasswordInput(
+        widget=forms.TextInput(
             attrs={
                 "class": "form-control",
                 "id": "email"
