@@ -17,6 +17,7 @@ def register_view(request):
             if password==password2:
                 user = User.objects.create_user(username, email, password)
             else:
+    
                 request.session['register_error'] = 1
         except:
             user = None
@@ -38,7 +39,7 @@ def login_view(request):
             # user is valid and active -> is_active
             # request.user == user
             login(request, user)
-            return redirect("/")
+            return redirect("../home")
         else:
             # attempt = request.session.get("attempt") or 0
             # request.session['attempt'] = attempt + 1
@@ -50,3 +51,6 @@ def logout_view(request):
     logout(request)
     # request.user == Anon User
     return redirect("/login")
+
+def Home_View(request):
+    return render(request, 'home.html')

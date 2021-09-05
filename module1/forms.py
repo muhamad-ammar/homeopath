@@ -84,3 +84,4 @@ class LoginForm(forms.Form):
         if qs.count() != 1:
             raise forms.ValidationError("This is an invalid user.")
         return username
+    
