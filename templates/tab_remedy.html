@@ -16,6 +16,8 @@ Symptoms | Remedies
             <h1 class="masthead-heading mb-0">Go Back to Homepage</h1><a class="btn rounded-pill mt-5" role="button" href="{% url 'home' %}" style="background-color: #d84b6b; color : white;width: 20%;height: 15%px;font-size: 22px;">Home</a></div>
     </div>
 </header>
+
+   
     <div class="container">
         <div class="col-md-12 search-table-col">
             <div class="table-responsive table-bordered table table-hover table-bordered results">
@@ -24,16 +26,20 @@ Symptoms | Remedies
                         <tr>
                             <th id="trs-hd" class="col-lg-2">Rubric</th>
                             <th id="trs-hd" class="col-lg-1">Remedies</th>
-                            <th id="trs-hd" class="col-lg-2">Member Since</th>
+                            <th id="trs-hd" class="col-lg-2">Add this </th>
                         </tr>
                     </thead>
                     <tbody>
-                        
-                        <tr>
-                            <td>01</td>
-                            <td>India</td>
+                        {% for x in sym %}
+
+                        <tr>                            
+                            <td>{{x.0}}</td>
+                            <td>{{x.1}}</td>
+                           
                             <td><button class="btn btn-success" style="margin-left: 5px;" type="submit"><i class="fa fa-check" data-toggle="tooltip" data-bs-tooltip="" data-placement="bottom" style="font-size: 15px;" title="Add this symptom"></i></button></td>
                         </tr>
+
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
