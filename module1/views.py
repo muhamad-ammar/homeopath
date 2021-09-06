@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from .forms import LoginForm, RegisterForm
+from .forms import LoginForm, RegisterForm, searchForm
 
 User = get_user_model()
 
@@ -17,7 +17,6 @@ def register_view(request):
             if password==password2:
                 user = User.objects.create_user(username, email, password)
             else:
-    
                 request.session['register_error'] = 1
         except:
             user = None
@@ -54,3 +53,10 @@ def logout_view(request):
 
 def Home_View(request):
     return render(request, 'home.html')
+def search_view(request):
+    form=searchForm(request.GET or None)
+    if form.is_valid():
+        keyword=form.get["keyword"]
+        return redirect("tab_remedy")
+    return render(request,"home.html", {"form": form})
+    

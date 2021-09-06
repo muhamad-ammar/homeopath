@@ -84,4 +84,12 @@ class LoginForm(forms.Form):
         if qs.count() != 1:
             raise forms.ValidationError("This is an invalid user.")
         return username
-    
+class searchForm(forms.Form):
+    keyword = forms.CharField(
+        label='Symptom',
+        widget=forms.TextInput(
+        attrs={
+        "class": "form-control",
+        "Placeholder":"e.g. Abrupt"
+        
+    }))    
