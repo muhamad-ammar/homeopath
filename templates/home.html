@@ -24,8 +24,8 @@
                         <div class="col-12 col-md-3"><button class="btn btn-block btn-lg" type="submit" style="background-color: #D84B6B; color: white;">Sign up!</button></div>
                     </div>
                 </form> -->
-                <form method='GET' action="." enctype="multipart/form-data">
-    
+                <form method='POST' action="{% url 'search_view' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
                     {{ form.as_p }}
                 
                     <button type='submit' id=btn class='{{ btn_class }}'>{% if submit_btn %} {{ submit_btn }} {% else %}Find {% endif %}</button>

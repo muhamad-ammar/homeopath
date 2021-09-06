@@ -7,7 +7,10 @@ urlpatterns = [
      path('login/', login_view,name="login"),
     path('logout/', logout_view,name="logout"),
     path('register/', register_view,name="register"),
-    path('home', search_view,name="home"),
-    path('tab_remedy',search_view,name="tab_remedy")
+    path('home', Home_View,name="home"),
+    path('search_view',search_view,name='search_view'),
+    
+    # path('tab_remedy/<keyword>', remedy_view, name='tab_remedy'),
+    #path('tab_remed',remedy_view,name="tab_remedy")
     
 ]

@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 from .forms import LoginForm, RegisterForm, searchForm
@@ -51,12 +52,20 @@ def logout_view(request):
     # request.user == Anon User
     return redirect("/login")
 
+@login_required(login_url='login')
 def Home_View(request):
     return render(request, 'home.html')
-def search_view(request):
+
+def Home_View(request):
     form=searchForm(request.GET or None)
-    if form.is_valid():
-        keyword=form.get["keyword"]
-        return redirect("tab_remedy")
     return render(request,"home.html", {"form": form})
+
+def search_view(request):
+    if request.method == "POST":
+            keyword=request.POST.get("keyword")
+            print(keyword)
+    return render(request,'tab_remedy.html')
+
+# def remedy_view(request,keyword):
+#     return render(request, "tab_remedy.html") 
     
