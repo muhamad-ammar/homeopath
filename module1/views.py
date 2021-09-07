@@ -1,8 +1,10 @@
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.shortcuts import render, redirect
-
+from django.contrib.auth.decorators import login_required
+import requests
+import json
 # Create your views here.
-from .forms import LoginForm, RegisterForm
+from .forms import LoginForm, RegisterForm, searchForm
 
 User = get_user_model()
 
@@ -14,7 +16,10 @@ def register_view(request):
         password = form.cleaned_data.get("password1")
         password2 = form.cleaned_data.get("password2")
         try:
-            user = User.objects.create_user(username, email, password)
+            if password==password2:
+                user = User.objects.create_user(username, email, password)
+            else:
+                request.session['register_error'] = 1
         except:
             user = None
         if user != None:
@@ -35,7 +40,7 @@ def login_view(request):
             # user is valid and active -> is_active
             # request.user == user
             login(request, user)
-            return redirect("/")
+            return redirect("../home")
         else:
             # attempt = request.session.get("attempt") or 0
             # request.session['attempt'] = attempt + 1
@@ -47,3 +52,47 @@ def logout_view(request):
     logout(request)
     # request.user == Anon User
     return redirect("/login")
+
+@login_required(login_url='login')
+def Home_View(request):
+    return render(request, 'home.html')
+
+def Home_View(request):
+    form=searchForm(request.GET or None)
+    return render(request,"home.html", {"form": form})
+
+def search_view(request):
+    if request.method == "POST":
+            keyword=request.POST.get("keyword")
+            response = requests.get(f'https://www.oorep.com/api/lookup?symptom={keyword}&repertory=kent&page=0&remedyString=&minWeight=0&getRemedies=1')
+            res=response.text          
+            jsondata=json.loads(res)
+            
+            # print(jsondata[0]['results'][0]['rubric']['fullPath'])
+            sub_sym = []
+            sub_sym_rem = []
+            # abc=jsondata[0]['results'][0]['weightedRemedies']
+            # print(jsondata[0]['results'][0]['weightedRemedies'].keys())
+            for x in jsondata[0]['results']:
+                sub_sym.append(x["rubric"]["fullPath"])
+                crr_sub_sym_rem = ''
+                for y in x['weightedRemedies']:
+                    crr_sub_sym_rem += ', ' + y["remedy"]["nameAbbrev"]
+                sub_sym_rem.append(crr_sub_sym_rem[2:])
+                
+                # print(word['remedy']['nameLong'])
+                # print(jsondata[0]['results'][0]['weightedRemedies'][""]['remedy']['nameLong'])
+            sym=[]
+            symIndex = 0
+            for x in sub_sym:
+                sym.append([])
+                sym[symIndex].append(x)
+                sym[symIndex].append(sub_sym_rem[symIndex])
+                symIndex+=1
+                # print("Name =",x,"\n\tRemi =", sub_sym_rem[sub_sym.index(x)])
+                
+    return render(request,'tab_remedy.html',{'sym':sym})
+
+# def remedy_view(request,keyword):
+#     return render(request, "tab_remedy.html") 
+    

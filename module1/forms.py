@@ -8,14 +8,14 @@ User = get_user_model()
 
 class RegisterForm(forms.Form):
     username = forms.CharField(label='Username',
-        widget=forms.PasswordInput(
+        widget=forms.TextInput(
             attrs={
                 "class": "form-control",
                 "id": "username"
             }
         ))
     email = forms.EmailField(label='Email',
-        widget=forms.PasswordInput(
+        widget=forms.TextInput(
             attrs={
                 "class": "form-control",
                 "id": "email"
@@ -84,3 +84,12 @@ class LoginForm(forms.Form):
         if qs.count() != 1:
             raise forms.ValidationError("This is an invalid user.")
         return username
+class searchForm(forms.Form):
+    keyword = forms.CharField(
+        label='Symptom',
+        widget=forms.TextInput(
+        attrs={
+        "class": "form-control",
+        "Placeholder":"e.g. Abrupt"
+        
+    }))    

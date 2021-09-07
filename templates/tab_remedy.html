@@ -1,0 +1,52 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block title %}
+Symptoms | Remedies
+{% endblock title %}
+{% block content %}
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>#trs-hd,.bill-header,.warning.no-result{text-align:center}.bill-header{font-size:12px}.form-control:focus{border-color:#25476a;outline:0;-webkit-box-shadow:none;box-shadow:none}.bill-header.cs{background-color:#25476a;color:#fff}.no-result,.results tr[visible=false]{display:none}.counter{padding:8px;color:#ccc}.fa.fa-warning{font-size:18px;color:red}.search.form-control{border-radius:0!important}.search-table-col{margin-top:100px}</style>
+<header class="masthead text-white text-center" style="background: url('https://res.cloudinary.com/ammar992/image/upload/v1630916243/Untitled_design_8_qdhyql.png ') no-repeat center center; padding: 5% 5% 5% 5%;">
+    <div class="masthead-content">
+        <div class="container">
+            <h1 class="masthead-heading mb-0">Go Back to Homepage</h1><a class="btn rounded-pill mt-5" role="button" href="{% url 'home' %}" style="background-color: #d84b6b; color : white;width: 20%;height: 15%px;font-size: 22px;">Home</a></div>
+    </div>
+</header>
+
+   
+    <div class="container">
+        <div class="col-md-12 search-table-col">
+            <div class="table-responsive table-bordered table table-hover table-bordered results">
+                <table class="table table-bordered table-hover">
+                    <thead class="bill-header cs">
+                        <tr>
+                            <th id="trs-hd" class="col-lg-2">Rubric</th>
+                            <th id="trs-hd" class="col-lg-1">Remedies</th>
+                            <th id="trs-hd" class="col-lg-2">Add this </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for x in sym %}
+
+                        <tr>                            
+                            <td>{{x.0}}</td>
+                            <td>{{x.1}}</td>
+                           
+                            <td><button class="btn btn-success" style="margin-left: 5px;" type="submit"><i class="fa fa-check" data-toggle="tooltip" data-bs-tooltip="" data-placement="bottom" style="font-size: 15px;" title="Add this symptom"></i></button></td>
+                        </tr>
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/script.min.js"></script>
+{% endblock content %}
