@@ -25,14 +25,20 @@
                     <tr>
                         <th id="trs-hd" class="col-lg-2">Rubric</th>
                         <th id="trs-hd" class="col-lg-1">Remedies Available</th>
-                        <th id="trs-hd" class="col-lg-2">Remedies you given to patient </th>
+                        <th id="trs-hd" class="col-lg-2">Remedies Form </th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>{{pair.0}}</td>
                         <td>{{pair.1}}</td>
-                        <td><input type="text"></td>
+                        <td>
+                            <form method='POST' action="#" enctype="multipart/form-data">{% csrf_token %}
+                            {{form.as_p}}
+                            <button type='submit' class='{{ btn_class }} btn btn-dark btn-lg btn-block'>{% if submit_btn %} {{ submit_btn }} {% else %}Submit {% endif %}</button>
+                        </form>
+                        </td>
+
                     </tr>
 
                 </tbody>

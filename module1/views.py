@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 import requests
 import json
 # Create your views here.
-from .forms import LoginForm, RegisterForm, searchForm
+from .forms import LoginForm, RegisterForm, searchForm,patientForm
 
 User = get_user_model()
 
@@ -52,15 +52,17 @@ def logout_view(request):
     logout(request)
     # request.user == Anon User
     return redirect("/login")
-
+sym=[]
 @login_required(login_url='login')
 def Home_View(request):
     return render(request, 'home.html')
 
 def Home_View(request):
     form=searchForm(request.GET or None)
+    global sym
+    sym=[]
     return render(request,"home.html", {"form": form})
-sym=[]
+
 def search_view(request):
     if request.method == "POST":
             keyword=request.POST.get("keyword")
@@ -95,13 +97,19 @@ def search_view(request):
 
 def table_view(request):
     global sym
-    
+    form = patientForm(request.POST)
+    if form.is_valid():
+        Remedies = json.load(form.get("remedy_given"))
+        print(Remedies)
+        Date = form.get("Date")
+        print(Date)
+        patient_name= form.cleaned_data.get("patient_name")
     if request.method == 'POST':         
         pair = [key for key in request.POST.keys()][1].split("|")
         # if '+' in request.POST.values():
         #     pair = [key for key in request.POST.keys()][1].split("|")
         #     #pair will be a list containing x and y
         #     object.create(thing1=pair[0], thing2=pair[1])
-        #     object.save()
-    return render(request,'tableform.html',{'pair':pair,'sym':sym})
+        #     object.save
+    return render(request,'tableform.html',{'pair':pair,'sym':sym, 'form':form})
     

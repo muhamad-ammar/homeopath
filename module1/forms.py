@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
+from bootstrap_datepicker_plus import DatePickerInput
 
 non_allowed_usernames = ['abc']
 # check for unique email & username
@@ -71,11 +72,6 @@ class LoginForm(forms.Form):
             }
         )
     )
-    # def clean(self):
-    #     data = super().clean()
-    #     username = data.get("username")
-    #     password = data.get("password")
-
     def clean_username(self):
         username = self.cleaned_data.get("username")
         qs = User.objects.filter(username__iexact=username) # thisIsMyUsername == thisismyusername
@@ -84,6 +80,32 @@ class LoginForm(forms.Form):
         if qs.count() != 1:
             raise forms.ValidationError("This is an invalid user.")
         return username
+class patientForm(forms.Form):
+    remedy_given=forms.CharField(
+        label='remedy',
+        widget=forms.TextInput(
+        attrs={
+        "class": "form-control",
+        "Placeholder":"e.g. Remedies"
+    }))
+    patient_name=forms.CharField(
+        label='Patient Name',
+        widget=forms.TextInput(
+        attrs={
+        "class": "form-control",
+        "Placeholder":"Enter Patient Name" 
+    }))
+    date = forms.DateField(
+        widget=DatePickerInput(
+            format='%d/%m/%Y',
+            attrs={
+                "class":"form-control",
+                "Placeholder":"e.g. 14-03-2021"
+                
+            }
+            )
+        
+        )
 class searchForm(forms.Form):
     keyword = forms.CharField(
         label='Symptom',
@@ -92,8 +114,4 @@ class searchForm(forms.Form):
         "class": "form-control",
         "Placeholder":"e.g. Abrupt"
         
-    }))    
-# class patientForm(forms.Form):
-#     remedy_given=forms.Textarea(
-#         label='remedy',
-#     )
+    }))        
