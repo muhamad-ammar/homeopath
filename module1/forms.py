@@ -93,3 +93,7 @@ class searchForm(forms.Form):
         "Placeholder":"e.g. Abrupt"
         
     }))    
+# class patientForm(forms.Form):
+#     remedy_given=forms.Textarea(
+#         label='remedy',
+#     )

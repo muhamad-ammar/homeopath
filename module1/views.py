@@ -67,7 +67,8 @@ def search_view(request):
             response = requests.get(f'https://www.oorep.com/api/lookup?symptom={keyword}&repertory=kent&page=0&remedyString=&minWeight=0&getRemedies=1')
             res=response.text          
             jsondata=json.loads(res)
-            global sym        
+            global sym 
+            sym=[]       
             # print(jsondata[0]['results'][0]['rubric']['fullPath'])
             sub_sym = []
             sub_sym_rem = []
