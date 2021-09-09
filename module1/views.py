@@ -60,18 +60,18 @@ def Home_View(request):
 def Home_View(request):
     form=searchForm(request.GET or None)
     return render(request,"home.html", {"form": form})
-
+sym=[]
 def search_view(request):
     if request.method == "POST":
             keyword=request.POST.get("keyword")
             response = requests.get(f'https://www.oorep.com/api/lookup?symptom={keyword}&repertory=kent&page=0&remedyString=&minWeight=0&getRemedies=1')
             res=response.text          
             jsondata=json.loads(res)
-            
+            global sym        
             # print(jsondata[0]['results'][0]['rubric']['fullPath'])
             sub_sym = []
             sub_sym_rem = []
-            # abc=jsondata[0]['results'][0]['weightedRemedies']
+            # sym=jsondata[0]['results'][0]['weightedRemedies']
             # print(jsondata[0]['results'][0]['weightedRemedies'].keys())
             for x in jsondata[0]['results']:
                 sub_sym.append(x["rubric"]["fullPath"])
@@ -82,7 +82,7 @@ def search_view(request):
                 
                 # print(word['remedy']['nameLong'])
                 # print(jsondata[0]['results'][0]['weightedRemedies'][""]['remedy']['nameLong'])
-            sym=[]
+            
             symIndex = 0
             for x in sub_sym:
                 sym.append([])
@@ -90,9 +90,17 @@ def search_view(request):
                 sym[symIndex].append(sub_sym_rem[symIndex])
                 symIndex+=1
                 # print("Name =",x,"\n\tRemi =", sub_sym_rem[sub_sym.index(x)])
-                
     return render(request,'tab_remedy.html',{'sym':sym})
 
-# def remedy_view(request,keyword):
-#     return render(request, "tab_remedy.html") 
+def table_view(request):
+    global sym
+    
+    if request.method == 'POST':         
+        pair = [key for key in request.POST.keys()][1].split("|")
+        # if '+' in request.POST.values():
+        #     pair = [key for key in request.POST.keys()][1].split("|")
+        #     #pair will be a list containing x and y
+        #     object.create(thing1=pair[0], thing2=pair[1])
+        #     object.save()
+    return render(request,'tableform.html',{'pair':pair,'sym':sym})
     
