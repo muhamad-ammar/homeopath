@@ -1,19 +1,9 @@
 {% extends 'base.html'%}
 {% load static %}
 {% block title %}
- Symptoms | Remedies
+ Patient Data
 {% endblock title %}
 {% block content %}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="  crossorigin="anonymous"></script>
-<script>
- 
-$(function(){
-    $(document).on("click","#transfer", function(){
-        var getselectedvalues=$("#tabel1 input:checked").parents("tr").clone().appendTo($("#tabel2 tbody").add(getselectedvalues));
-    })
-})
-
 
 </script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900">
@@ -26,6 +16,34 @@ $(function(){
             <h1 class="masthead-heading mb-0">Go Back to Homepage</h1><a class="btn rounded-pill mt-5" role="button" href="{% url 'home' %}" style="background-color: #d84b6b; color : white;width: 20%;height: 15%px;font-size: 22px;">Home</a></div>
     </div>
 </header>
+
+<div class="container">
+    <div class="col-md-12 search-table-col">
+        <div class="table-responsive table-bordered table table-hover table-bordered results">
+            <table class="table table-bordered table-hover" id="table2">
+                <thead class="bill-header cs">
+                    <tr>
+                        <th id="trs-hd" class="col-lg-2">Rubric</th>
+                        <th id="trs-hd" class="col-lg-1">Remedies Available</th>
+                        <th id="trs-hd" class="col-lg-2">Remedies you given to patient </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{pair.0}}</td>
+                        <td>{{pair.1}}</td>
+                        <td><input type="text"></td>
+                    </tr>
+
+                </tbody>
+               
+            </table>
+           
+        </div>
+    </div>
+</div>
+<div class="container"><hr></div>
+
     <div class="container">
         <div class="col-md-12 search-table-col">
             <div class="table-responsive table-bordered table table-hover table-bordered results">
@@ -34,7 +52,7 @@ $(function(){
                         <tr>
                             <th id="trs-hd" class="col-lg-2">Rubric</th>
                             <th id="trs-hd" class="col-lg-3">Remedies</th>
-                            <th id="trs-hd" class="col-lg-1">Add this </th>
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -43,12 +61,7 @@ $(function(){
                         <tr>                            
                             <td>{{x.0}}</td>
                             <td>{{x.1}}</td>
-                            <td>                            
-                                <form action="{% url 'table_view' %}" method="post">
-                                {% csrf_token %}
-                                <input type="submit" name="{{ x.0 }}|{{ x.1 }}" > 
-                            </form> 
-                            </td>
+                         
                         </tr>
 
                         {% endfor %}
@@ -60,16 +73,7 @@ $(function(){
     </div>
     
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="  crossorigin="anonymous"></script>
-    <script>
-        
-    $(function(){
-        $(document).on("click","#transfer", function(){
-            var getselectedvalues=$("#tabel1 input:checked").parents("tr").clone().appendTo($("#tabel2 tbody").add(getselectedvalues));
-        })
-    })
 
-    
-    </script> 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
