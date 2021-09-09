@@ -1,5 +1,6 @@
 {% extends 'base.html'%}
 {% load static %}
+
 {% block title %}
  Patient Data
 {% endblock title %}
@@ -32,12 +33,13 @@
                     <tr>
                         <td>{{pair.0}}</td>
                         <td>{{pair.1}}</td>
+                        <form method='POST' action="{% url 'submit_view'%}" enctype="multipart/form-data">
                         <td>
-                            <form method='POST' action="#" enctype="multipart/form-data">{% csrf_token %}
+                            {% csrf_token %}
                             {{form.as_p}}
-                            <button type='submit' class='{{ btn_class }} btn btn-dark btn-lg btn-block'>{% if submit_btn %} {{ submit_btn }} {% else %}Submit {% endif %}</button>
-                        </form>
+                            <button type='submit' class='btn btn-dark btn-lg btn-block'>{% if submit_btn %} {{ submit_btn }} {% else %}Submit {% endif %}</button>
                         </td>
+                    </form>
 
                     </tr>
 
@@ -80,7 +82,13 @@
     
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="  crossorigin="anonymous"></script>
 
-
+    <script>
+        $(function () {
+          $("#id_date").datepicker({
+            format:'dd/mm/yyyy',
+          });
+        });
+      </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
 

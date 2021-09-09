@@ -81,6 +81,13 @@ class LoginForm(forms.Form):
             raise forms.ValidationError("This is an invalid user.")
         return username
 class patientForm(forms.Form):
+    symptom=forms.CharField(
+        label='Symptoms',
+        widget=forms.TextInput(
+        attrs={
+        "class": "form-control",
+        "Placeholder":"e.g. Mind, Abrupt"
+    }))
     remedy_given=forms.CharField(
         label='remedy',
         widget=forms.TextInput(
@@ -95,17 +102,7 @@ class patientForm(forms.Form):
         "class": "form-control",
         "Placeholder":"Enter Patient Name" 
     }))
-    date = forms.DateField(
-        widget=DatePickerInput(
-            format='%d/%m/%Y',
-            attrs={
-                "class":"form-control",
-                "Placeholder":"e.g. 14-03-2021"
-                
-            }
-            )
-        
-        )
+    date = forms.DateField(input_formats=['%d/%m/%Y'])
 class searchForm(forms.Form):
     keyword = forms.CharField(
         label='Symptom',

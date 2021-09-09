@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import requests
 import json
+from django.urls import reverse
 # Create your views here.
 from .forms import LoginForm, RegisterForm, searchForm,patientForm
 
@@ -54,11 +55,9 @@ def logout_view(request):
     return redirect("/login")
 sym=[]
 @login_required(login_url='login')
-def Home_View(request):
-    return render(request, 'home.html')
 
 def Home_View(request):
-    form=searchForm(request.GET or None)
+    form=searchForm(request.POST or None)
     global sym
     sym=[]
     return render(request,"home.html", {"form": form})
@@ -98,12 +97,7 @@ def search_view(request):
 def table_view(request):
     global sym
     form = patientForm(request.POST)
-    if form.is_valid():
-        Remedies = json.load(form.get("remedy_given"))
-        print(Remedies)
-        Date = form.get("Date")
-        print(Date)
-        patient_name= form.cleaned_data.get("patient_name")
+    
     if request.method == 'POST':         
         pair = [key for key in request.POST.keys()][1].split("|")
         # if '+' in request.POST.values():
@@ -112,4 +106,14 @@ def table_view(request):
         #     object.create(thing1=pair[0], thing2=pair[1])
         #     object.save
     return render(request,'tableform.html',{'pair':pair,'sym':sym, 'form':form})
+
+def submit_view(request):
+    if request.method == "POST":
+        Remedies = request.POST.get("remedy_given")
+        print(Remedies)
+        Date = request.POST.get("date")
+        print(Date)
+        patient_name= request.POST.get("patient_name")
+        print(patient_name)
+    return redirect(Home_View)
     
