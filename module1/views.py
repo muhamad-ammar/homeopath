@@ -5,7 +5,7 @@ import requests
 import json
 from django.urls import reverse
 # Create your views here.
-from .forms import LoginForm, RegisterForm, searchForm,patientForm
+from .forms import LoginForm, RegisterForm, searchForm,patientForm,feedbackForm
 
 User = get_user_model()
 
@@ -115,5 +115,15 @@ def submit_view(request):
         print(Date)
         patient_name= request.POST.get("patient_name")
         print(patient_name)
+        patientid=patient_name+"%"+str(Date)
     return redirect(Home_View)
-    
+def feedback_view(request):
+    # Dummy Data it will be extracted from Database using patient Id
+    patientid="Ammar%13/09/2021"
+    splitid=patientid.split('%')
+    remdies="Nat-m., Gaph., Gur."
+    remedy=remdies.split(',')
+    date=splitid[1]
+    patient_name=splitid[0]
+    form=feedbackForm(request.POST)   
+    return render(request,'feedback.html',{'form':form,'remedy':remedy,'patient_name':patient_name,'date':date})

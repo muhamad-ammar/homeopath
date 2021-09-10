@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from bootstrap_datepicker_plus import DatePickerInput
 
+
 non_allowed_usernames = ['abc']
 # check for unique email & username
 
@@ -111,4 +112,13 @@ class searchForm(forms.Form):
         "class": "form-control",
         "Placeholder":"e.g. Abrupt"
         
-    }))        
+    }))  
+class feedbackForm(forms.Form):
+    keyword = forms.CharField(
+        label='Symptom',
+        widget=forms.TextInput(
+        attrs={
+        "class": "form-control",
+        "Placeholder":"e.g. Abrupt"
+        
+    }))  
