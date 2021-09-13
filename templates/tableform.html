@@ -37,7 +37,7 @@
                         <td>
                             {% csrf_token %}
                             {{form.as_p}}
-                            <button type='submit' class='btn btn-dark btn-lg btn-block'>{% if submit_btn %} {{ submit_btn }} {% else %}Submit {% endif %}</button>
+                            <button type='submit' class='btn btn-dark btn-lg btn-block' name={{x.3}} value="{{x.2}}">{% if submit_btn %} {{ submit_btn }} {% else %}Submit {% endif %}</button>
                         </td>
                     </form>
 

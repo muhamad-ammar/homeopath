@@ -54,6 +54,7 @@ def logout_view(request):
     # request.user == Anon User
     return redirect("/login")
 sym=[]
+rubric=[]
 @login_required(login_url='login')
 
 def Home_View(request):
@@ -71,27 +72,23 @@ def search_view(request):
             global sym 
             sym=[]       
             # print(jsondata[0]['results'][0]['rubric']['fullPath'])
-            sub_sym = []
-            sub_sym_rem = []
             # sym=jsondata[0]['results'][0]['weightedRemedies']
             # print(jsondata[0]['results'][0]['weightedRemedies'].keys())
+            symIndex = 0
             for x in jsondata[0]['results']:
-                sub_sym.append(x["rubric"]["fullPath"])
+                sym.append([])
+                sym[symIndex].append(x["rubric"]["fullPath"])
                 crr_sub_sym_rem = ''
                 for y in x['weightedRemedies']:
                     crr_sub_sym_rem += ', ' + y["remedy"]["nameAbbrev"]
-                sub_sym_rem.append(crr_sub_sym_rem[2:])
-                
+                sym[symIndex].append(crr_sub_sym_rem[2:])
+                sym[symIndex].append(x["rubric"]["id"])
+                symIndex+=1
                 # print(word['remedy']['nameLong'])
                 # print(jsondata[0]['results'][0]['weightedRemedies'][""]['remedy']['nameLong'])
             
-            symIndex = 0
-            for x in sub_sym:
-                sym.append([])
-                sym[symIndex].append(x)
-                sym[symIndex].append(sub_sym_rem[symIndex])
-                symIndex+=1
-                # print("Name =",x,"\n\tRemi =", sub_sym_rem[sub_sym.index(x)])
+               # print("Name =",x,"\n\tRemi =", sub_sym_rem[sub_sym.index(x)])
+    
     return render(request,'tab_remedy.html',{'sym':sym})
 
 def table_view(request):

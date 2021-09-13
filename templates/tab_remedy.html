@@ -4,18 +4,14 @@
  Symptoms | Remedies
 {% endblock title %}
 {% block content %}
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="  crossorigin="anonymous"></script>
-<script>
- 
-$(function(){
-    $(document).on("click","#transfer", function(){
-        var getselectedvalues=$("#tabel1 input:checked").parents("tr").clone().appendTo($("#tabel2 tbody").add(getselectedvalues));
-    })
-})
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="  crossorigin="anonymous"></script>
 
 
-</script>
+      
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -35,19 +31,21 @@ $(function(){
                             <th id="trs-hd" class="col-lg-2">Rubric</th>
                             <th id="trs-hd" class="col-lg-3">Remedies</th>
                             <th id="trs-hd" class="col-lg-1">Add this </th>
+                            <th id="trs-hd" class="col-lg-1">Add this </th>
+                            
                         </tr>
                     </thead>
                     <tbody>
                         {% for x in sym %}
 
-                        <tr>                            
+                        <tr id='{{x.2}}'>                            
                             <td>{{x.0}}</td>
                             <td>{{x.1}}</td>
+                            <td>{{x.2}}</td>
                             <td>                            
-                                <form action="{% url 'table_view' %}" method="post">
-                                {% csrf_token %}
-                                <input type="submit" name="{{ x.0 }}|{{ x.1 }}" > 
-                            </form> 
+                                <div id="abc">
+                                <input type="submit"  id='{{x.2}}' value='{{x.2}}'> 
+                                    </div>
                             </td>
                         </tr>
 
@@ -58,20 +56,45 @@ $(function(){
             </div>
         </div>
     </div>
-    
+    <div class="container">
+        <div class="col-md-12 search-table-col">
+            <div class="table-responsive table-bordered table table-hover table-bordered results">
+                <table class="table table-bordered table-hover" id="table2">
+                    <thead class="bill-header cs">
+                        <tr>
+                            <th id="trs-hd" class="col-lg-2">Rubric</th>
+                            <th id="trs-hd" class="col-lg-3">Remedies</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                       
+                    </tbody>
+                </table>
+                
+            </div>
+        </div>
+    </div>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="  crossorigin="anonymous"></script>
-    <script>
-        
-    $(function(){
-        $(document).on("click","#transfer", function(){
-            var getselectedvalues=$("#tabel1 input:checked").parents("tr").clone().appendTo($("#tabel2 tbody").add(getselectedvalues));
-        })
-    })
-
-    
-    </script> 
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+    
+        alert('adadasdas');
+         $('#abc input').click(function () {
+            // event.stopPropagation();
+            // event.stopImmediatePropagation();
+            (alert('adadasdas'))
+            var me = $(this).attr('id');
+            $("#"+me).clone().appendTo("#table2");        
+                
+            });
+            
+        </script>
+        
+   
+
 
 {% endblock content %}
