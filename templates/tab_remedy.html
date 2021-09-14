@@ -31,7 +31,7 @@
                             <th id="trs-hd" class="col-lg-2">Rubric</th>
                             <th id="trs-hd" class="col-lg-3">Remedies</th>
                             <th id="trs-hd" class="col-lg-1">Add this </th>
-                            <th id="trs-hd" class="col-lg-1">Add this </th>
+                           
                             
                         </tr>
                     </thead>
@@ -39,12 +39,11 @@
                         {% for x in sym %}
 
                         <tr id='{{x.2}}'>                            
-                            <td>{{x.0}}</td>
-                            <td>{{x.1}}</td>
-                            <td>{{x.2}}</td>
-                            <td>                            
+                            <td >{{x.0}}</td>
+                            <td >{{x.1}}</td>
+                            <td id='useless'>                            
                                 <div id="abc">
-                                <input type="submit"  id='{{x.2}}' value='{{x.2}}'> 
+                                <input type="submit" class="btn btn-success" id='{{x.2}}' value='Add this' name="Hello"> 
                                     </div>
                             </td>
                         </tr>
@@ -67,8 +66,8 @@
                             
                         </tr>
                     </thead>
-                    <tbody>
-                       
+                    <tbody >
+                    
                     </tbody>
                 </table>
                 
@@ -82,13 +81,15 @@
 
     <script>
     
-        alert('adadasdas');
+   
          $('#abc input').click(function () {
             // event.stopPropagation();
             // event.stopImmediatePropagation();
-            (alert('adadasdas'))
+            
             var me = $(this).attr('id');
-            $("#"+me).clone().appendTo("#table2");        
+            $(this).prop('disabled', true);
+            $("#"+me).clone().appendTo("#table2");   
+            $("#table2 tr").find("td:eq(2)").remove();     
                 
             });
             
