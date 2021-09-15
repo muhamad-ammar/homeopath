@@ -1,0 +1,8 @@
+<div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+    <form method='GET' action="{% url 'search_view'%}" enctype="multipart/form-data">
+        
+        {{ s_form.as_p }}
+        
+        <button type='submit' id=btn class='{{ btn_class }}'>{% if submit_btn %} {{ submit_btn }} {% else %}Find {% endif %}</button>
+    </form>
+</div>

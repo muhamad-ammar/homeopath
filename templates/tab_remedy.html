@@ -9,7 +9,10 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="  crossorigin="anonymous"></script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="  crossorigin="anonymous"></script>
-
+<style>
+    #btn{border-radius:20px;border:none;width:150px;display:block;margin:10px auto 0;line-height:25px;padding: 10px 0 10px 0; font-size: large; font-weight: 500;}
+    
+</style>
 
       
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900">
@@ -19,6 +22,7 @@
 <header class="masthead text-white text-center" style="background: url('https://res.cloudinary.com/ammar992/image/upload/v1630916243/Untitled_design_8_qdhyql.png ') no-repeat center center; padding: 5% 5% 5% 5%;">
     <div class="masthead-content">
         <div class="container">
+           {% include 'search.html' with s_from=s_from %}
             <h1 class="masthead-heading mb-0">Go Back to Homepage</h1><a class="btn rounded-pill mt-5" role="button" href="{% url 'home' %}" style="background-color: #d84b6b; color : white;width: 20%;height: 15%px;font-size: 22px;">Home</a></div>
     </div>
 </header>
@@ -39,7 +43,7 @@
                         {% for x in sym %}
 
                         <tr id='{{x.2}}'>                            
-                            <td >{{x.0}}</td>
+                            <td ><p id='{{x.2}}' onclick="copy()">{{x.0}}</p></td>
                             <td >{{x.1}}</td>
                             <td id='useless'>                            
                                 <div id="abc">
@@ -74,6 +78,51 @@
             </div>
         </div>
     </div>
+    <div class="container">
+        <div class="col-md-12 search-table-col">
+            <div class="table-responsive d table table-hover  results">
+                <table class="table  table-hover" id="table2">
+                    <form method='POST' action="{% url 'table_view' %}" enctype="multipart/form-data" id="patientform">
+                        {% csrf_token %}
+                        <thead class="bill-header cs">
+                            <tr>
+                                <th colspan="2">Patient Form</th>
+                            </tr>
+                        </thead>
+                    <tbody >
+                    <tr>
+                        <td class="col-lg-2">Symptoms :</td>
+                        <td>{{form.symptoms}}</td>
+                    </tr>
+                    <tr>
+                        <td class="col-lg-2">Remedy Given :</td>
+                        <td>{{form.remedy_given}}</td>
+                    </tr><tr>
+                        <td class="col-lg-2">Patient Name :</td>
+                        <td>{{form.patient_name}}</td>
+                    </tr><tr>
+                        <td class="col-lg-2">Date :</td>
+                        <td> {{form.date}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                    <input id="btn" class="btn-success" style="margin-top:20px;" type="submit" value="Save this">
+                    </td>
+                    </tr>
+                    </form>
+                    </tbody>
+                </table>
+                
+            </div>
+        </div>
+    </div>
+   
+   
+    
+     
+     
+     
+    
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="  crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -94,6 +143,31 @@
             });
             
         </script>
+         <script>
+            $("#patientform").on('submit', function(event) {
+                  alert("Successfully Saved");
+            })
+            </script>
+<script>
+    function copy() {
+        /* Get the text field */
+        alert('hello')
+        var id = $(this).attr('id');
+        alert(id)
+        var copyText = document.getElementById(id).innerText;
+        alert(copyText)
+        /* Select the text field */
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+        /* Copy the text inside the text field */
+        navigator.clipboard.writeText(copyText.value);
+
+        /* Alert the copied text */
+        
+}
+
+            </script>
         
    
 
