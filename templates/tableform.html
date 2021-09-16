@@ -1,0 +1,35 @@
+<div class="container">
+    <div class="col-md-12 search-table-col">
+        <div class="table-responsive table-bordered table table-hover table-bordered results">
+            <table class="table table-bordered table-hover" id="table1">
+                <thead class="bill-header cs">
+                    <tr>
+                        <th id="trs-hd" class="col-lg-2">Rubric</th>
+                        <th id="trs-hd" class="col-lg-3">Remedies</th>
+                        <th id="trs-hd" class="col-lg-1">Add this </th>
+                       
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for x in sym %}
+
+                    <tr id='{{x.2}}'>                            
+                        <td >{{x.0}}</td>
+                        <td >{{x.1}}</td>
+                        <td id='useless'>                            
+                            <div id="abc">
+                            <input type="submit" class="btn btn-success" id='{{x.2}}' value='Add this' name="Hello"> 
+                                </div>
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+</div>
+<div id='hello'></div>
+

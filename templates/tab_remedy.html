@@ -1,0 +1,91 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block title %}
+ Symptoms | Remedies
+{% endblock title %}
+{% block content %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="  crossorigin="anonymous"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="  crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>#trs-hd,.bill-header,.warning.no-result{text-align:center}.bill-header{font-size:12px}.form-control:focus{border-color:#25476a;outline:0;-webkit-box-shadow:none;box-shadow:none}.bill-header.cs{background-color:#25476a;color:#fff}.no-result,.results tr[visible=false]{display:none}.counter{padding:8px;color:#ccc}.fa.fa-warning{font-size:18px;color:red}.search.form-control{border-radius:0!important}.search-table-col{margin-top:100px}</style>
+<header class="masthead text-white text-center" style="background: url('https://res.cloudinary.com/ammar992/image/upload/v1630916243/Untitled_design_8_qdhyql.png ') no-repeat center center; padding: 5% 5% 5% 5%;">
+    <div class="masthead-content">
+        <div class="container">
+            <h1 class="masthead-heading mb-0">Go Back to Homepage</h1><a class="btn rounded-pill mt-5" role="button" href="{% url 'home' %}" style="background-color: #d84b6b; color : white;width: 20%;height: 15%px;font-size: 22px;">Home</a></div>
+    </div>
+    <div class="container">
+        <br>
+        <br>
+        {% include 'search.html' with s_from=s_from %}
+        
+    </div>
+</header>
+  
+    {% include 'tableform.html' %}
+    
+    <div class="container">
+        <div class="col-md-12 search-table-col">
+            <div class="table-responsive table-bordered table table-hover table-bordered results">
+                <table class="table table-bordered table-hover" id="table2">
+                    <thead class="bill-header cs">
+                        <tr>
+                            <th id="trs-hd" class="col-lg-2">Rubric</th>
+                            <th id="trs-hd" class="col-lg-3">Remedies</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody >
+                    
+                    </tbody>
+                </table>
+                
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="  crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+    
+   
+         $('#abc input').click(function () {
+            // event.stopPropagation();
+            // event.stopImmediatePropagation();
+            
+            var me = $(this).attr('id');
+            $(this).prop('disabled', true);
+            $("#"+me).clone().appendTo("#table2");   
+            $("#table2 tr").find("td:eq(2)").remove();     
+                
+            });
+            
+        </script>
+<script>
+    $("#form").click(function () {
+        var input = $('#user-input').val();
+    
+        $.ajax({
+            url: "{% url 'get_response' %}",
+            data: {
+              'inputValue': input
+            },
+            dataType: 'json',
+            success: function (data) {
+              document.getElementById('hello').innerHTML = data;
+            }
+          });
+        });
+    
+    </script>     
+   
+
+
+{% endblock content %}
