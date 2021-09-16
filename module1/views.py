@@ -61,7 +61,7 @@ key=[]
 def Home_View(request):
     global s_form
     global key
-    key=[]
+    key.clear()
     s_form=searchForm(request.GET or None)
     return render(request,"home.html", {"s_form": s_form})
 def search_view(request):
@@ -72,21 +72,20 @@ def search_view(request):
     sym.clear() 
     print(sym)
     jsondata=None
+    global key
     if request.method == "GET":
             jsondata=None
             response=None
             res=None
             key_s=request.GET
             keyword=key_s['keyword']
-            global keys
-            key.append(keyword)
-            print(key)
-                  
+            key.append(keyword)             
+            symIndex = 0
             for val in key:
-               
+                print(val)
+                print('_______')
                 response = requests.get(f'https://www.oorep.com/api/lookup?symptom={val}&repertory=kent&page=0&remedyString=&minWeight=0&getRemedies=1')
                 res=response.text     
-                
                 jsondata=json.loads(res)
                 response=None
                 print(response)
@@ -95,7 +94,6 @@ def search_view(request):
                 # print(jsondata[0]['results'][0]['rubric']['fullPath'])
                 # sym=jsondata[0]['results'][0]['weightedRemedies']
                 # print(jsondata[0]['results'][0]['weightedRemedies'].keys())
-                symIndex = 0
                 for x in jsondata[0]['results']:
                     sym.append([])
                     sym[symIndex].append(x["rubric"]["fullPath"])
@@ -110,6 +108,7 @@ def search_view(request):
                 
                 # print("Name =",x,"\n\tRemi =", sub_sym_rem[sub_sym.index(x)])
     jsondata=None
+    print(key)
     return render(request,'tab_remedy.html',{'sym':sym,'form':form,"s_form": s_form})
 
 def table_view(request):
