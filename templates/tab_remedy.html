@@ -49,8 +49,8 @@
                             
                         </tr>
                     </thead>
-                    <tbody>
-                        {% for x in sym %}
+                    <tbody id='tbody1'>
+                        <!-- {% for x in sym %} 
     
                         <tr id='{{x.2}}'>                            
                             <td >{{x.0}}</td>
@@ -62,8 +62,8 @@
                             </td>
                         </tr>
     
-                        {% endfor %}
-                    </tbody>
+                        {% endfor %}-->
+                    </tbody> 
                 </table>
                 
             </div>
@@ -127,12 +127,34 @@
               
             },
             success: function (data) {
-            alert(data);
-              $('h5').html(data);
+            alert(typeof(data));
+            var data_arr=data.split("],[");
+            var csv_arr=data_arr[4];
+            alert(typeof(csv_arr));
+            console.log(csv_arr);
+            var result = "<tbody >";
+                alert(data.length);
+                console.log(data);
+            data.forEach(myFunction);
+            function myFunction(val, index){
+                result+="<tr>";
+                resul+="<td>"+val+"</td>";
+               
+                result+="</tr>";
+           
+                result += "</tbody>";
+            console.log(result)
+                }    
+            $("#tbody1").html(result);    
+
+
             }
           });
-          console.log('1');
+          console.log('Done');
         });
+  
+
+
     
     </script>     
    
