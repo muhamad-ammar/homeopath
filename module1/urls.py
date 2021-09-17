@@ -8,13 +8,13 @@ urlpatterns = [
     path('logout/', logout_view,name="logout"),
     path('register/', register_view,name="register"),
     path('home', Home_View,name="home"),
-    path('search_view',search_view,name='search_view'),
-
+    path('',search_view,name='search_view'),
+    path('search',table_view,name='search'),
     path('submit_view',submit_view,name='submit_view'),
     path('feedback',feedback_view,name='feedback_view'),
 
-    re_path(r'^ajax/get_response/$', table_view, name='get_response')
-    ('', table_view, name='get_response')
+    # re_path(r'^ajax/get_response/$', table_view, name='get_response'),
+    # re_path('', table_view, name='get_response')
     # path('tab_remedy/<keyword>', remedy_view, name='tab_remedy'),
     #path('tab_remed',remedy_view,name="tab_remedy")
     

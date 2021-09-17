@@ -69,7 +69,8 @@ def search_view(request):
     sym=[]
     rubric=[]
     if request.method == "POST":
-            keyword=request.POST.get('keyword')
+            key_s=request.GET
+            keyword=key_s['inputValue']
             response = requests.get(f'https://www.oorep.com/api/lookup?symptom={keyword}&repertory=kent&page=0&remedyString=&minWeight=0&getRemedies=1')
             res=response.text          
             jsondata=json.loads(res)
@@ -98,26 +99,31 @@ def search_view(request):
 def table_view(request):
     sym=[]
     rubric=[]
-    keyword = request.GET.get('inputValue')
-    response = requests.get(f'https://www.oorep.com/api/lookup?symptom={keyword}&repertory=kent&page=0&remedyString=&minWeight=0&getRemedies=1')
-    res=response.text          
-    jsondata=json.loads(res)
-    # print(jsondata[0]['results'][0]['rubric']['fullPath'])
-    # sym=jsondata[0]['results'][0]['weightedRemedies']
-    # print(jsondata[0]['results'][0]['weightedRemedies'].keys())
-    symIndex = 0
-    for x in jsondata[0]['results']:
-        sym.append([])
-        sym[symIndex].append(x["rubric"]["fullPath"])
-        crr_sub_sym_rem = ''
-        for y in x['weightedRemedies']:
-            crr_sub_sym_rem += ', ' + y["remedy"]["nameAbbrev"]
-        sym[symIndex].append(crr_sub_sym_rem[2:])
-        sym[symIndex].append(x["rubric"]["id"])
-        symIndex+=1
-    print(sym)
-    data=sym
-    return HttpResponse(data)
+    print('Hi')
+    if request.method=='GET':
+        print('Hello')
+        key_s=request.GET
+        print('Hye')
+        keyword=key_s['inputValue']
+        print('Bye')
+        response = requests.get(f'https://www.oorep.com/api/lookup?symptom={keyword}&repertory=kent&page=0&remedyString=&minWeight=0&getRemedies=1')
+        res=response.text          
+        jsondata=json.loads(res)
+        # print(jsondata[0]['results'][0]['rubric']['fullPath'])
+        # sym=jsondata[0]['results'][0]['weightedRemedies']
+        # print(jsondata[0]['results'][0]['weightedRemedies'].keys())
+        symIndex = 0
+        for x in jsondata[0]['results']:
+            sym.append([])
+            sym[symIndex].append(x["rubric"]["fullPath"])
+            crr_sub_sym_rem = ''
+            for y in x['weightedRemedies']:
+                crr_sub_sym_rem += ', ' + y["remedy"]["nameAbbrev"]
+            sym[symIndex].append(crr_sub_sym_rem[2:])
+            sym[symIndex].append(x["rubric"]["id"])
+            symIndex+=1
+        print(sym)
+        return HttpResponse(sym)
 
 def submit_view(request):
     if request.method == "POST":
