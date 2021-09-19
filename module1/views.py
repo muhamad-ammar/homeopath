@@ -122,8 +122,15 @@ def table_view(request):
             sym[symIndex].append(crr_sub_sym_rem[2:])
             sym[symIndex].append(x["rubric"]["id"])
             symIndex+=1
-        print(sym)
-        return HttpResponse(sym)
+        result = ''
+        for x in sym:
+            result += "<tr id = "+str(x[2])+">"
+            result += "<td class= 'col-lg-2'>" + x[0]+"</td>"
+            result += "<td class= 'col-lg-3'>" + x[1]+"</td>"
+            result += "<td class= 'col-lg-1'><div class='abc'>"
+            result += "<button type = 'submit' value='Add This' id = "+str(x[2])+" class = 'btn btn-success'  >Add This</button></div></td>"
+            result += '</tr>'
+        return HttpResponse(result)
 
 def submit_view(request):
     if request.method == "POST":

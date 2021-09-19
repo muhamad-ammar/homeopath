@@ -1,0 +1,10 @@
+
+git init
+Then git config user.name '........'
+Then git config user.email ".........."
+Then git add remote origin ...........(link)
+git pull origin ali
+Open cmd there
+python -m venv .module
+.module1\scripts\activate
+pip install -r requirements.txt

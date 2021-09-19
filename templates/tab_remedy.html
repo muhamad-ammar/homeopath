@@ -5,10 +5,10 @@
 {% endblock title %}
 {% block content %}
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="  crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" defer></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="  crossorigin="anonymous" defer></script>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="  crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="  crossorigin="anonymous" defer></script>
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i">
@@ -27,7 +27,7 @@
      
                 <input type="text" id='keyword' placeholder="e.g. Abrupt">
                 
-                <button type='submit' id=btn >Find</button>
+                <button type='submit' id='btn' >Find</button>
             </form>
 
         </div>
@@ -90,33 +90,36 @@
             </div>
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="  crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="  crossorigin="anonymous" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
 
-    <script>
-    
-   
-         $('#abc input').click(function () {
-            // event.stopPropagation();
-            // event.stopImmediatePropagation();
-            
-            var me = $(this).attr('id');
-            $(this).prop('disabled', true);
-            $("#"+me).clone().appendTo("#table2");   
-            $("#table2 tr").find("td:eq(2)").remove();     
-                
-            });
-            
-        </script>
+
 <script>
+        $(document).on('click','.abc button',function() {
+        alert("ok");
+        var me = $(this).attr('id');
+        alert(me);
+        $(this).prop('disabled', true);
+        $("#"+me).clone().appendTo("#table2");   
+        $("#table2 tr").find("td:eq(2)").remove();     
+            
+        });
+    {% comment %} $('.abc button').bind("click",function(){
+                    alert("ok");
+        var me = $(this).attr('id');
+        alert(me);
+        $(this).prop('disabled', true);
+        $("#"+me).clone().appendTo("#table2");   
+        $("#table2 tr").find("td:eq(2)").remove();
+     }); {% endcomment %}
     $(document).on('submit', '#form',function (e) {
         console.log('1');
         var input = $('#keyword').val();
-        console.log('1');
+        console.log('1',input);
         e.preventDefault();
         console.log('1');
         $.ajax({
@@ -127,37 +130,23 @@
               
             },
             success: function (data) {
-            alert(typeof(data));
-            var data_arr=data.split("],[");
-            var csv_arr=data_arr[4];
-            alert(typeof(csv_arr));
-            console.log(csv_arr);
-            var result = "<tbody >";
-                alert(data.length);
                 console.log(data);
-            data.forEach(myFunction);
-            function myFunction(val, index){
-                result+="<tr>";
-                resul+="<td>"+val+"</td>";
-               
-                result+="</tr>";
-           
-                result += "</tbody>";
-            console.log(result)
-                }    
-            $("#tbody1").html(result);    
-
-
+                $("#tbody1").html(data);
             }
           });
           console.log('Done');
         });
-  
+
 
 
     
     </script>     
    
+    <script>
+        {% comment %} $(document).ready(function(){
+            alert('loading');
 
+        }); {% endcomment %}
+        </script>
 
 {% endblock content %}
