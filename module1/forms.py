@@ -84,7 +84,7 @@ class LoginForm(forms.Form):
 class patientForm(forms.Form):
     symptom=forms.CharField(
         label='Symptoms',
-        widget=forms.TextInput(
+        widget=forms.Textarea(
         attrs={
         "class": "form-control",
         "Placeholder":"e.g. Mind, Abrupt"

@@ -68,6 +68,7 @@ def search_view(request):
     global s_form
     sym=[]
     rubric=[]
+    pForm=patientForm(request.POST or None)
     if request.method == "POST":
             key_s=request.GET
             keyword=key_s['inputValue']
@@ -94,7 +95,7 @@ def search_view(request):
             
                # print("Name =",x,"\n\tRemi =", sub_sym_rem[sub_sym.index(x)])
     
-    return render(request,'tab_remedy.html',{"s_form": s_form})
+    return render(request,'tab_remedy.html',{"pForm": pForm})
 
 def table_view(request):
     sym=[]
