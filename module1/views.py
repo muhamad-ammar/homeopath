@@ -110,6 +110,7 @@ def table_view(request):
         response = requests.get(f'https://www.oorep.com/api/lookup?symptom={keyword}&repertory=kent&page=0&remedyString=&minWeight=0&getRemedies=1')
         res=response.text          
         jsondata=json.loads(res)
+        
         # print(jsondata[0]['results'][0]['rubric']['fullPath'])
         # sym=jsondata[0]['results'][0]['weightedRemedies']
         # print(jsondata[0]['results'][0]['weightedRemedies'].keys())
@@ -132,7 +133,17 @@ def table_view(request):
             result += "<button type = 'submit' value='Add This' id = "+str(x[2])+" class = 'btn btn-success'  >Add This</button></div></td>"
             result += '</tr>'
         return HttpResponse(result)
-
+def repo_view(request):
+    if request.method=='GET':
+        id_s=request.GET
+        ids=id_s['id_data']
+        id_arr=ids.split(',')
+        print(id_arr)
+        # ids=id_s['ids']
+        print(ids)
+        print('Call working')
+        idsss='abc'
+        return HttpResponse(idsss)
 def submit_view(request):
     if request.method == "POST":
         Remedies = request.POST.get("remedy_given")

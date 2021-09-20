@@ -1,7 +1,7 @@
 from os import name
 from django.contrib import admin
 from django.urls import path,re_path
-from .views import feedback_view, login_view, logout_view,Home_View, register_view,search_view,table_view,submit_view
+from .views import feedback_view, login_view, logout_view,Home_View, register_view,search_view,table_view,submit_view,repo_view
 urlpatterns = [
 
     path('login/', login_view,name="login"),
@@ -10,6 +10,7 @@ urlpatterns = [
     path('home', Home_View,name="home"),
     path('',search_view,name='search_view'),
     path('search',table_view,name='search'),
+    path('repo',repo_view,name='repo'),
     path('submit_view',submit_view,name='submit_view'),
     path('feedback',feedback_view,name='feedback_view'),
 
