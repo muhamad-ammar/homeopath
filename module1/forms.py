@@ -87,7 +87,8 @@ class patientForm(forms.Form):
         widget=forms.Textarea(
         attrs={
         "class": "form-control",
-        "Placeholder":"e.g. Mind, Abrupt"
+        "Placeholder":"e.g. Mind, Abrupt",
+        "id":"symp"
     }))
     remedy_given=forms.CharField(
         label='remedy',

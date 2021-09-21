@@ -77,10 +77,6 @@
     <div id='hello'></div>
     
     <div class="container">
-        <form id="repoform">
-            <input type="text" id="ids">
-            <input type='submit' id='repo' value="Repotise">
-        </form>
         <div class="col-md-12 search-table-col">
             <div class="table-responsive table-bordered table table-hover table-bordered results">
                 <table class="table table-bordered table-hover" id="table2">
@@ -158,8 +154,16 @@
         
         
         $(this).prop('disabled', true);
-        $("#"+me).clone().appendTo("#table2");   
-        $("#table2 tr").find("td:eq(2)").remove();     
+        $("#"+me).clone().appendTo("#table2"); 
+        $("#table2 tr").find("td:eq(2)").remove();
+        // $('#table2').find(':input').prop("disabled", false);
+        var currentRow=$(this).closest("tr");
+        var col1=currentRow.find("td:eq(0)").text();  
+        console.log(col1);
+        $( "#symp" ).val( function( index, val ) {
+            console.log('Good');
+        return val +"\n"+col1;
+            });     
             
         });
     // {% comment %} $('.abc button').bind("click",function(){
@@ -193,26 +197,6 @@
         </script>
 
         <script>
-        $(document).on('submit', '#repoform',function (e){
-        console.log('22');
-        var id_data = $('#ids').val();
-        console.log(id_data);
-        // console.log('1',input);
-        e.preventDefault();
-        console.log('happy');
-        $.ajax({
-            type:'GET',
-            url:"{% url 'repo' %}",
-            data: {
-              'id_data': id_data,
-            },
-            success: function (data) {
-                console.log(data);
-                
-            }
-          });
-          console.log('Done');
-        });
 
 
     
