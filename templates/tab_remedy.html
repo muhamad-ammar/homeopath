@@ -113,7 +113,10 @@
                     </tr>
                     <tr>
                         <td class="col-lg-2">Remedy Given :</td>
-                        <td>{{pForm.remedy_given}}</td>
+                        <td>
+                            <div>{{pForm.remedy_given}}</div>
+                            <div id= 'suggestions' style = "padding-left:15px"><div>
+                        </td>
                     </tr><tr>
                         <td class="col-lg-2">Patient Name :</td>
                         <td>{{pForm.patient_name}}</td>
@@ -142,7 +145,7 @@
 
 
 <script>
-    
+        var remiesList = [];
         $(document).on('click','.abc button',function() {
         
         var me = $(this).attr('id');
@@ -158,13 +161,21 @@
         $("#table2 tr").find("td:eq(2)").remove();
         // $('#table2').find(':input').prop("disabled", false);
         var currentRow=$(this).closest("tr");
-        var col1=currentRow.find("td:eq(0)").text();  
-        console.log(col1);
+        var col1=currentRow.find("td:eq(0)").text();
         $( "#symp" ).val( function( index, val ) {
-            console.log('Good');
-        return val +"\n"+col1;
-            });     
-            
+            return val +"\n"+col1;
+            }); 
+        
+        var col2=currentRow.find("td:eq(1)").text();
+        let crrRemiesList = col2.split(",");
+        for (x of crrRemiesList) {
+            x = x.replace(" ","");
+            if(remiesList.indexOf(x) == -1)  
+            {
+                remiesList.push(x);  
+            }
+        }
+        console.log(remiesList);
         });
     // {% comment %} $('.abc button').bind("click",function(){
     //                 alert("ok");
@@ -208,5 +219,25 @@
 
         // }); {% endcomment %}
         </script>
+    <script>
 
+        const searchInput = document.querySelector('#search-input');
+        const suggestionsPanel = document.querySelector('#suggestions');
+
+        searchInput.addEventListener('keyup', function() {
+            const input = searchInput.value;
+            suggestionsPanel.innerHTML = '';
+            const suggestions = remiesList.filter(function(remies) {
+                return remies.toLowerCase().startsWith(input);
+            });
+            suggestions.forEach(function(suggested) {
+                const div = document.createElement('div');
+                div.innerHTML = suggested;
+                suggestionsPanel.appendChild(div);
+            });
+            if (input === '') {
+                suggestionsPanel.innerHTML = '';  
+            }
+        })
+    </script>
 {% endblock content %}
