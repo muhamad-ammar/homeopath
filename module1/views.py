@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.http import JsonResponse,HttpResponse
 # Create your views here.
 from .forms import LoginForm, RegisterForm, searchForm,patientForm,feedbackForm
+from .models import patientData
 
 User = get_user_model()
 
