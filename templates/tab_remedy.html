@@ -9,6 +9,10 @@
     {
         display: none;
     }
+    #suggestions
+    {
+        z-index: 1;
+    }
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" defer></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="  crossorigin="anonymous" defer></script>
@@ -228,7 +232,7 @@
             const input = searchInput.value;
             suggestionsPanel.innerHTML = '';
             const suggestions = remiesList.filter(function(remies) {
-                return remies.toLowerCase().startsWith(input);
+                return remies.toLowerCase().startsWith(input.toLowerCase());
             });
             suggestions.forEach(function(suggested) {
                 const div = document.createElement('div');

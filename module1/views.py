@@ -55,12 +55,8 @@ def logout_view(request):
     # request.user == Anon User
     return redirect("/login")
 
-
-s_form=''
 def Home_View(request):
-    global s_form
-    s_form=searchForm(request.GET or None)
-    return render(request,"home.html", {"s_form": s_form})
+    return render(request,"home.html")
 
 def search_view(request):
     sym=[]
