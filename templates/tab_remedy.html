@@ -254,7 +254,7 @@
 
         // }); {% endcomment %}
         </script>
-    <script>
+    <!-- <script>
 
         const searchInput = document.querySelector('#search-input');
         const suggestionsPanel = document.querySelector('#suggestions');
@@ -276,18 +276,10 @@
                 suggestionsPanel.innerHTML = '';  
             }
         })
-        function store(){
-            var current=$('#search-input').val();
-            console.log(current);
-        $( "#search-store" ).val( function( index, val ) {
-            $('#search-input').val('');
-            return val +"%"+current;
-            
-            });  
-        };
         
-    </script>
-    <!-- <script>
+        
+    </script> -->
+    <script>
         function autocomplete(inp, arr) {
           /*the autocomplete function takes two arguments,
           the text field element and an array of possible autocompleted values:*/
@@ -384,6 +376,15 @@
               closeAllLists(e.target);
           });
         }
-        autocomplete(document.getElementById("myInput"), countries);
-</script>         -->
+        autocomplete(document.getElementById("search-input"), remiesList);
+        function store(){
+            var current=$('#search-input').val();
+            console.log(current);
+        $( "#search-store" ).val( function( index, val ) {
+            $('#search-input').val('');
+            return val +"%"+current;
+            
+            });  
+        };
+</script>        
 {% endblock content %}
