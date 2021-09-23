@@ -98,6 +98,13 @@ class patientForm(forms.Form):
         "Placeholder":"e.g. Remedies",
         "id":"search-input"
     }))
+    remedies=forms.CharField(
+        label='remedies',
+        widget=forms.TextInput(
+        attrs={
+        "class": "form-control",
+        "id":"search-store"
+    }))
     patient_name=forms.CharField(
         label='Patient Name',
         widget=forms.TextInput(

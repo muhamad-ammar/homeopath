@@ -143,14 +143,17 @@ def repo_view(request):
         return HttpResponse(idsss)
 def submit_view(request):
     if request.method == "POST":
-        Remedies = request.POST.get("remedy_given")
-        print(Remedies)
+        dbpatient=patientData()
+        dbpatient.remedies = request.POST.get("remedies")
+        print(request.POST.get("remedies"))
+        dbpatient.rubrics = request.POST.get("symptom")
+        print(request.POST.get("symptom"))
         Date = request.POST.get("date")
-        print(Date)
         patient_name= request.POST.get("patient_name")
-        print(patient_name)
-        patientid=patient_name+"%"+str(Date)
-    return redirect(Home_View)
+        dbpatient.patientID=patient_name+"%"+str(Date)
+        print(patient_name+"%"+str(Date))
+        dbpatient.save()
+    return render(request,'home.html')
 
 def feedback_view(request):
     # Dummy Data it will be extracted from Database using patient Id
