@@ -24,6 +24,7 @@
                         <div class="col-12 col-md-3"><button class="btn btn-block btn-lg" type="submit" style="background-color: #D84B6B; color: white;">Sign up!</button></div>
                     </div>
                 </form> -->
+                
                 <form method='POST' action="{% url 'home' %}" enctype="multipart/form-data">
                     {% csrf_token %}
                     <input type="textfield" name="{{patient_name}}" value="{{patient_name}}" disabled>
@@ -49,7 +50,53 @@
 <br>
 <header class="container"  style="width: 100% !important; ">
     <div class="row" >
-        <div class="col-md-4 content-boxes-v6 md-margin-bottom-50">
+        <div class="container">
+            <div class="col-md-12 search-table-col">
+                <div class="table-responsive table-bordered table table-hover table-bordered results">
+                    <table class="table table-bordered table-hover" id="table1">
+                        <thead class="bill-header cs">
+                            <tr>
+                                <th id="trs-hd" class="col-lg-2">Patient Name</th>
+                                <th id="trs-hd" class="col-lg-3">Date</th>
+                                <th id="trs-hd" class="col-lg-1">Feedback</th>
+                            </tr>
+                        </thead>
+                        <tbody id='tbody1'>
+                        {% for x in result %} 
+                            <tr>                            
+                                <td >{{x.0}}</td>
+                                <td >{{x.1}}</td>
+                                <td id='useless'>                            
+                                    <div class="abc">
+                                        <script>
+                                            
+                                        if('{{x.2}}'=='False'){
+                                            btn="<input type='submit' class='btn btn-danger'  id='{{x.1}}' value='Add feedback' name='Hello'> ";
+                                            $('.abc').html(btn);
+                                            
+                                        }
+                                        if('{{x.2}}'=='True'){
+                                            btn="<input type='submit' class='btn btn-success'  value='Submitted' id='{{x.1}}' > ";
+                                            $('.abc').html(btn);
+                                        }
+                                        </script>
+                                    {% comment %} {% if x.2=='False' %}
+                                        <input type="submit" class="btn btn-danger"  value='Add this' name="Hello"> 
+                                    {% endif %}    
+                                    {% if x.2=='True' %}
+                                        <input type="submit" class="btn btn-success"  value='Add this' name="Hello" disabled> 
+                                    {% endif %} {% endcomment%}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody> 
+                    </table>
+                    
+                </div>
+            </div>
+        </div>
+        <!-- <div class="col-md-4 content-boxes-v6 md-margin-bottom-50">
             <img src="https://res.cloudinary.com/ammar992/image/upload/v1630845745/1_ufuurh.png" style="width:50%; height:60%;">
             <br>
             <h4 class="title-v3-md text-uppercase " style="margin-top: 10%;">Full repertory</h4>
@@ -66,7 +113,7 @@
             <br>
             <h4 class="title-v3-md text-uppercase" style="margin-top: 10%;">Powerful slides</h4>
             <p >At vero eos et accusato odio dignissimos ducimus qui blanditiis praesentium voluptatum.</p>
-        </div>
+        </div> -->
     </div><!--/row-->
 </header><!--/container-->
 <br>
@@ -74,4 +121,21 @@
         <br>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="  crossorigin="anonymous" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+    var result1='{{result.0.0}}|{{result.0.1}}|{{result.0.2}}';
+    var result2='{{result.1.0}}|{{result.1.1}}|{{result.2.2}}';
+    var result3='{{result.2.0}}|{{result.2.1}}|{{result.2.2}}';
+    console.log(result1);
+    console.log(result2);
+    console.log(result3);
+    // $("#tbody1").html(result);
+</script>
 {% endblock content %}

@@ -156,12 +156,39 @@ def submit_view(request):
     return render(request,'home.html')
 
 def feedback_view(request):
+    print('Good')
+    patient=patientData.objects.all()
+    print(patient)
+    patientid=patient[0].patientID
     # Dummy Data it will be extracted from Database using patient Id
-    patientid="Ammar%13/09/2021"
+    # patientid="Ammar%13/09/2021"
     splitid=patientid.split('%')
-    remdies="Nat-m., Gaph., Gur."
-    remedy=remdies.split(',')
+    # # remdies="Nat-m., Gaph., Gur."
+    # # remedy=remdies.split(',')
     date=splitid[1]
+    print(date)
     patient_name=splitid[0]
-    form=feedbackForm(request.POST)   
-    return render(request,'feedback.html',{'form':form,'remedy':remedy,'patient_name':patient_name,'date':date})
+    print(patient_name)
+    result=[]
+    x=0
+    for dat in patient:
+        patientarr=[]
+        flag=''
+        date=''
+        patient_name=''
+        pid=dat.patientID
+        flag=dat.feedback
+        splitid=pid.split('%')
+        date=splitid[1]
+        patient_name=splitid[0]
+        patientarr.append(patient_name)
+        patientarr.append(date)
+        patientarr.append(flag)
+        result.append(patientarr)
+        x+=1            
+        # result+="<td>"+patient_name+"</td>"
+        # result+="<td>"+date+"</td>"
+        # result+="<td><button type = 'submit' value='Fill Feedback' id = "+pid+" class = 'btn btn-success'  >Fill Feedback</div></td>"
+        # result+="<tr>"
+    # form=feedbackForm(request.POST)   
+    return render(request,'feedback.html',{"result":result})
