@@ -62,31 +62,21 @@
                             </tr>
                         </thead>
                         <tbody id='tbody1'>
-                        {% for x in result %} 
+                        {% for x in feedNotSubmited %} 
                             <tr>                            
                                 <td >{{x.0}}</td>
                                 <td >{{x.1}}</td>
                                 <td id='useless'>                            
-                                    <div class="abc">
-                                        <script>
-                                            
-                                        if('{{x.2}}'=='False'){
-                                            btn="<input type='submit' class='btn btn-danger'  id='{{x.1}}' value='Add feedback' name='Hello'> ";
-                                            $('.abc').html(btn);
-                                            
-                                        }
-                                        if('{{x.2}}'=='True'){
-                                            btn="<input type='submit' class='btn btn-success'  value='Submitted' id='{{x.1}}' > ";
-                                            $('.abc').html(btn);
-                                        }
-                                        </script>
-                                    {% comment %} {% if x.2=='False' %}
-                                        <input type="submit" class="btn btn-danger"  value='Add this' name="Hello"> 
-                                    {% endif %}    
-                                    {% if x.2=='True' %}
-                                        <input type="submit" class="btn btn-success"  value='Add this' name="Hello" disabled> 
-                                    {% endif %} {% endcomment%}
-                                    </div>
+                                    <div class="abc"><input type='submit' class='btn btn-danger'  id='{{x.3}}' value='Add feedback' name='Hello'></div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% for x in feedSubmited %} 
+                            <tr>                            
+                                <td >{{x.0}}</td>
+                                <td >{{x.1}}</td>
+                                <td id='useless'>                            
+                                    <div class="abc"><input type='submit' class='btn btn-success'  value='Submitted' id='{{x.3}}' ></div>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -137,5 +127,25 @@
     console.log(result2);
     console.log(result3);
     // $("#tbody1").html(result);
+</script>
+<script>
+ $(document).on('click','.abc input',function() {
+     var me = $(this).attr('id');
+     alert(me);
+     e.preventDefault();
+
+        $.ajax({
+            type:'GET',
+            url:"{% url 'search' %}",
+            data: {
+              'inputValue': input,
+              
+              
+            },
+            success: function (data) {
+                $("#tbody1").html(data);
+            }
+          });
+ });
 </script>
 {% endblock content %}

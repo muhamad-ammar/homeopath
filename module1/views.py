@@ -155,22 +155,17 @@ def submit_view(request):
         dbpatient.save()
     return render(request,'home.html')
 
+def saveFeedbackForm(request):
+    
+    return "sads"
+
 def feedback_view(request):
     print('Good')
     patient=patientData.objects.all()
-    print(patient)
-    patientid=patient[0].patientID
-    # Dummy Data it will be extracted from Database using patient Id
-    # patientid="Ammar%13/09/2021"
-    splitid=patientid.split('%')
-    # # remdies="Nat-m., Gaph., Gur."
-    # # remedy=remdies.split(',')
-    date=splitid[1]
-    print(date)
-    patient_name=splitid[0]
-    print(patient_name)
     result=[]
-    x=0
+    
+    feedSubmited = []
+    feedNotSubmited = []
     for dat in patient:
         patientarr=[]
         flag=''
@@ -179,16 +174,15 @@ def feedback_view(request):
         pid=dat.patientID
         flag=dat.feedback
         splitid=pid.split('%')
-        date=splitid[1]
-        patient_name=splitid[0]
+        patient_name,date=splitid[0],splitid[1]
         patientarr.append(patient_name)
         patientarr.append(date)
         patientarr.append(flag)
-        result.append(patientarr)
-        x+=1            
-        # result+="<td>"+patient_name+"</td>"
-        # result+="<td>"+date+"</td>"
-        # result+="<td><button type = 'submit' value='Fill Feedback' id = "+pid+" class = 'btn btn-success'  >Fill Feedback</div></td>"
-        # result+="<tr>"
-    # form=feedbackForm(request.POST)   
-    return render(request,'feedback.html',{"result":result})
+        patientarr.append(pid)
+        print(dat.feedback," ",type(dat.feedback))
+        if dat.feedback == False:
+            feedNotSubmited.append(patientarr)
+        if dat.feedback == True:
+            feedSubmited.append(patientarr)
+            
+    return render(request,'feedback.html',{"feedSubmited":feedSubmited,"feedNotSubmited":feedNotSubmited})

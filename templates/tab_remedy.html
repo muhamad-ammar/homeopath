@@ -138,7 +138,12 @@
         <div class="col-md-12 search-table-col">
             <div class="table-responsive d table table-hover  results">
                 <form method='POST' action="{% url 'submit_view' %}">
-                <table class="table  table-hover" id="table2">
+                <div class ="patient-form">
+                    {% comment %} <div style="float:left;" class = "col-lg-1"></div>
+                    <div style="float:left;" class = "col-lg-3"></div>
+                    <div style="clear:both;"></div> {% endcomment %}
+                </div>
+                {% comment %} <table class="table  table-hover" id="table2">
                         {% csrf_token %}
                         <thead class="bill-header cs">
                             <tr>
@@ -170,7 +175,7 @@
                     </td>
                     </tr>
                 </tbody>
-            </table>
+            </table> {% endcomment %}
         </form>
                 
             </div>
@@ -190,18 +195,25 @@
         $(document).on('click','.abc button',function() {
         
         var me = $(this).attr('id');
-        
+
+        var result = "";
+        var currentRow=$(this).closest("tr");
+        var col1=currentRow.find("td:eq(0)").text();
+        var div1 = "<div style='float:left;' class = 'col-lg-3'>"+col1+"</div>";
+        var div2 = "<div style='float:left;' class = 'col-lg-3'><input type ='text' class = 'form-control'></div><div style='clear:both'></div >";
+        result = div1+div2;
+        $(".patient-form").append(result);
         $( "#ids" ).val( function( index, val ) {
         return val + ","+ me.toString();
             });
         
         
         $(this).prop('disabled', true);
-        $("#"+me).clone().appendTo("#table2"); 
+        /*$("#"+me).clone().appendTo("#table2"); 
         $("#table2 tr").find("td:eq(2)").remove();
         // $('#table2').find(':input').prop("disabled", false);
         var currentRow=$(this).closest("tr");
-        var col1=currentRow.find("td:eq(0)").text();
+        var col1=currentRow.find("td:eq(0)").text();*/
         $( "#symp" ).val( function( index, val ) {
             return val +"\n"+col1;
             }); 
@@ -280,7 +292,7 @@
         
     </script> -->
     <script>
-        function autocomplete(inp, arr) {
+        {% comment %} function autocomplete(inp, arr) {
           /*the autocomplete function takes two arguments,
           the text field element and an array of possible autocompleted values:*/
           var currentFocus;
@@ -375,8 +387,8 @@
           document.addEventListener("click", function (e) {
               closeAllLists(e.target);
           });
-        }
-        autocomplete(document.getElementById("search-input"), remiesList);
+        } {% endcomment %}
+        {% comment %} autocomplete($('.search-input'), remiesList); {% endcomment %}
         function store(){
             var current=$('#search-input').val();
             console.log(current);

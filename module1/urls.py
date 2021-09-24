@@ -1,7 +1,7 @@
 from os import name
 from django.contrib import admin
 from django.urls import path,re_path
-from .views import feedback_view, login_view, logout_view,Home_View, register_view,search_view,table_view,submit_view,repo_view
+from .views import feedback_view, login_view, logout_view,Home_View, register_view,search_view,table_view,submit_view,repo_view,saveFeedbackForm
 urlpatterns = [
 
     path('login/', login_view,name="login"),
@@ -13,6 +13,7 @@ urlpatterns = [
     path('repo',repo_view,name='repo'),
     path('submit_view',submit_view,name='submit_view'),
     path('feedback',feedback_view,name='feedback_view'),
+    path('saveFeedbackForm',saveFeedbackForm,name='saveFeedbackForm'),
 
     # re_path(r'^ajax/get_response/$', table_view, name='get_response'),
     # re_path('', table_view, name='get_response')
