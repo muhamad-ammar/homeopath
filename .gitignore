@@ -1,3 +1,5 @@
 .module1/
 .venv/
 .module/
+__pycache__/
+module/

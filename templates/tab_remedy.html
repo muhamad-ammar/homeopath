@@ -115,7 +115,7 @@
     </div>
     <div id='hello'></div>
     
-    <div class="container">
+    <!-- <div class="container">
         <div class="col-md-12 search-table-col">
             <div class="table-responsive table-bordered table table-hover table-bordered results">
                 <table class="table table-bordered table-hover" id="table2">
@@ -133,17 +133,38 @@
                 
             </div>
         </div>
-    </div>
+    </div> -->
     <div class="container">
         <div class="col-md-12 search-table-col">
             <div class="table-responsive d table table-hover  results">
                 <form method='POST' action="{% url 'submit_view' %}">
-                <div class ="patient-form">
-                    {% comment %} <div style="float:left;" class = "col-lg-1"></div>
-                    <div style="float:left;" class = "col-lg-3"></div>
-                    <div style="clear:both;"></div> {% endcomment %}
-                </div>
-                {% comment %} <table class="table  table-hover" id="table2">
+                    <table class="table table-bordered table-hover" id="table2">
+                        <thead class="bill-header cs">
+                            <tr>
+                                <th id="trs-hd" class="col-lg-2">Rubric</th>
+                                <th id="trs-hd" class="col-lg-3">Remedies</th>
+                                
+                            </tr>
+                        </thead>
+                        <tr>
+                            <td class="col-sm-6 col-md-6 col-lg-6">Patient Name</td>
+                            <td class="col-sm-6 col-md-6 col-lg-5"><input type ='text' class = 'form-control' id="patient_name" placeholder="e.g. Ali"></td>
+                        </tr>
+                        <tr>
+                            <td class="col-sm-6 col-md-6 col-lg-6">Date</td>
+                            <td class="col-sm-6 col-md-6 col-lg-5"><input type ='date' class = 'form-control' id="patient_name" ></td>
+                        </tr>
+                        
+                <tbody class ="patient-form">
+                  
+                
+                </tbody>
+                <tr>
+                    <td colspan="2">
+                <button class="btn-success" style="margin-top:20px;" type="submit" >{% if submit_btn %} {{ submit_btn }} {% else %}Save this {% endif %}</button>
+                </td>
+                </tr>
+                <!-- {% comment %} <table class="table  table-hover" id="table2">
                         {% csrf_token %}
                         <thead class="bill-header cs">
                             <tr>
@@ -175,7 +196,8 @@
                     </td>
                     </tr>
                 </tbody>
-            </table> {% endcomment %}
+            </table> {% endcomment %} -->
+            </table>
         </form>
                 
             </div>
@@ -199,8 +221,8 @@
         var result = "";
         var currentRow=$(this).closest("tr");
         var col1=currentRow.find("td:eq(0)").text();
-        var div1 = "<div style='float:left;' class = 'col-lg-3'>"+col1+"</div>";
-        var div2 = "<div style='float:left;' class = 'col-lg-3'><input type ='text' class = 'form-control'></div><div style='clear:both'></div >";
+        var div1 = "<tr><td class = 'col-lg-6'>"+col1+"</td>";
+        var div2 = "<td class = 'col-lg-5'><input type ='text' class = 'form-control'></td></tr>";
         result = div1+div2;
         $(".patient-form").append(result);
         $( "#ids" ).val( function( index, val ) {
