@@ -9,11 +9,11 @@
     {
         display: none;
     }
-    #search-store
+    .search-store
     {
         border: none !important;
         pointer-events:none;
-        background:rgb(187, 186, 186);
+        background:rgb(233, 233, 233);
     }
     .autocomplete-items {
   position: absolute;
@@ -221,8 +221,8 @@
         var result = "";
         var currentRow=$(this).closest("tr");
         var col1=currentRow.find("td:eq(0)").text();
-        var div1 = "<tr><td class = 'col-lg-6'>"+col1+"</td>";
-        var div2 = "<td class = 'col-lg-5'><input type ='text' class = 'form-control'></td></tr>";
+        var div1 = "<tr id=t"+me+"><td class = 'col-lg-6'>"+col1+"</td>";
+        var div2 = "<td class = 'col-lg-5'><div><div style='float: left; width: 78% !important;'><input type ='text' style='width:90%' class='search-store' id=s"+me+"></div><div id="+me+" style='float: right; width: 9% !important;border: 1px solid;' class='btn btn-success' onclick='store(this.id)'>+</div><div id="+me+" style='float: right; width: 9% !important;border: 1px solid;' class='btn btn-danger' onclick='delstore(this.id)'>-</div><div style='clear:both'></div><input type ='text' id=i"+me+" class = 'form-control'></div></td></tr>";
         result = div1+div2;
         $(".patient-form").append(result);
         $( "#ids" ).val( function( index, val ) {
@@ -411,14 +411,19 @@
           });
         } {% endcomment %}
         {% comment %} autocomplete($('.search-input'), remiesList); {% endcomment %}
-        function store(){
-            var current=$('#search-input').val();
+        function store(id){
+            var current=$('#i'+id).val();
             console.log(current);
-        $( "#search-store" ).val( function( index, val ) {
-            $('#search-input').val('');
+        $( "#s"+id ).val( function( index, val ) {
+            $('#i'+id).val('');
             return val +"%"+current;
             
             });  
+        };
+        function delstore(id){
+            var current=$('#i'+id).val();
+            console.log(current);
+        return $( "#s"+id ).val("")
         };
 </script>        
 {% endblock content %}
