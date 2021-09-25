@@ -137,7 +137,7 @@
     <div class="container">
         <div class="col-md-12 search-table-col">
             <div class="table-responsive d table table-hover  results">
-                <form method='POST' action="{% url 'submit_view' %}">
+                <form id="patientform">
                     <table class="table table-bordered table-hover" id="table2">
                         <thead class="bill-header cs">
                             <tr>
@@ -148,11 +148,11 @@
                         </thead>
                         <tr>
                             <td class="col-sm-6 col-md-6 col-lg-6">Patient Name</td>
-                            <td class="col-sm-6 col-md-6 col-lg-5"><input type ='text' class = 'form-control' id="patient_name" placeholder="e.g. Ali"></td>
+                            <td class="col-sm-6 col-md-6 col-lg-5"><input type ='text' class = 'form-control' name="pname" id="patient_name" placeholder="e.g. Ali"></td>
                         </tr>
                         <tr>
                             <td class="col-sm-6 col-md-6 col-lg-6">Date</td>
-                            <td class="col-sm-6 col-md-6 col-lg-5"><input type ='date' class = 'form-control' id="patient_name" ></td>
+                            <td class="col-sm-6 col-md-6 col-lg-5"><input type ='date' class = 'form-control' name='date' id="date" ></td>
                         </tr>
                         
                 <tbody class ="patient-form">
@@ -221,8 +221,10 @@
         var result = "";
         var currentRow=$(this).closest("tr");
         var col1=currentRow.find("td:eq(0)").text();
+        // var colname=col1.replace(", ","_");
+        // var col= colname.replace(",","-");
         var div1 = "<tr id=t"+me+"><td class = 'col-lg-6'>"+col1+"</td>";
-        var div2 = "<td class = 'col-lg-5'><div><div style='float: left; width: 78% !important;'><input type ='text' style='width:90%' class='search-store' id=s"+me+"></div><div id="+me+" style='float: right; width: 9% !important;border: 1px solid;' class='btn btn-success' onclick='store(this.id)'>+</div><div id="+me+" style='float: right; width: 9% !important;border: 1px solid;' class='btn btn-danger' onclick='delstore(this.id)'>-</div><div style='clear:both'></div><input type ='text' id=i"+me+" class = 'form-control'></div></td></tr>";
+        var div2 = "<td class = 'col-lg-5'><div><div style='float: left; width: 78% !important;'><input type ='text' style='width:90%' class='search-store' name="+me+" id=s"+me+"></div><div id="+me+" style='float: right; width: 9% !important;border: 1px solid;' class='btn btn-success' onclick='store(this.id)'>+</div><div id="+me+" style='float: right; width: 9% !important;border: 1px solid;' class='btn btn-danger' onclick='delstore(this.id)'>-</div><div style='clear:both'></div><p style='border:1px' contentEditable='true' id=i"+me+" class = 'form-control'></p></div></td></tr>";
         result = div1+div2;
         $(".patient-form").append(result);
         $( "#ids" ).val( function( index, val ) {
@@ -412,10 +414,10 @@
         } {% endcomment %}
         {% comment %} autocomplete($('.search-input'), remiesList); {% endcomment %}
         function store(id){
-            var current=$('#i'+id).val();
+            var current=$('#i'+id).text();
             console.log(current);
         $( "#s"+id ).val( function( index, val ) {
-            $('#i'+id).val('');
+            $('#i'+id).text('');
             return val +"%"+current;
             
             });  
@@ -425,5 +427,23 @@
             console.log(current);
         return $( "#s"+id ).val("")
         };
+    $('#patientform').submit(function() {
+        // get all the inputs into an array.
+    var values = {};
+    var $inputs = $('#patientform :input');
+    // not sure if you wanted this, but I thought I'd add it.
+    // get an associative array of just the values.
+    values = {};
+    $inputs.each(function() {
+
+        values[this.name] = $(this).val();
+
+    });
+    alert('Hold1');
+    console.log(values)
+    alert('Hold2');
+    $("#hello").html(values);
+
+});
 </script>        
 {% endblock content %}
