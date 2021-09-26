@@ -418,32 +418,57 @@
             console.log(current);
         $( "#s"+id ).val( function( index, val ) {
             $('#i'+id).text('');
-            return val +"%"+current;
+            return val +"|"+current;
             
             });  
-        };
+        }
         function delstore(id){
             var current=$('#i'+id).val();
             console.log(current);
         return $( "#s"+id ).val("")
-        };
+        }
+   
     $('#patientform').submit(function() {
-        // get all the inputs into an array.
-    var values = {};
+    // get all the inputs into an array.
     var $inputs = $('#patientform :input');
     // not sure if you wanted this, but I thought I'd add it.
     // get an associative array of just the values.
-    values = {};
+
+    var values = [];
     $inputs.each(function() {
-
-        values[this.name] = $(this).val();
-
+        name=this.name;
+        value=$(this).val();
+        vals=name+'?'+value;
+        values.push(vals);
+        console.log(vals);
     });
     alert('Hold1');
-    console.log(values)
+    alert(values);
+    alert('Holdx');
+    console.log(values);
+//     $(document).on('submit', '#form',function (e) {
+
+// var input = $('#keyword').val();
+
+// e.preventDefault();
+
+$.ajax({
+    type:'GET',
+    url:"{% url 'submit_view' %}",
+    data: {
+      'values': values,
+      
+      
+    },
+    success: function (data) {
+        alert(data);
+    }
+  });
+
+});
     alert('Hold2');
     $("#hello").html(values);
 
-});
+// });
 </script>        
 {% endblock content %}

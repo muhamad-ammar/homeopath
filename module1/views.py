@@ -142,17 +142,20 @@ def repo_view(request):
         idsss='abc'
         return HttpResponse(idsss)
 def submit_view(request):
-    if request.method == "POST":
-        dbpatient=patientData()
-        dbpatient.remedies = request.POST.get("remedies")
-        print(request.POST.get("remedies"))
-        dbpatient.rubrics = request.POST.get("symptom")
-        print(request.POST.get("symptom"))
-        Date = request.POST.get("date")
-        patient_name= request.POST.get("patient_name")
-        dbpatient.patientID=patient_name+"%"+str(Date)
-        print(patient_name+"%"+str(Date))
-        dbpatient.save()
+    if request.method == "GET":
+        val_s=request.GET
+        print(val_s)
+        print(type(val_s))
+        # dbpatient=patientData()
+        # dbpatient.remedies = request.POST.get("remedies")
+        # print(request.POST.get("remedies"))
+        # dbpatient.rubrics = request.POST.get("symptom")
+        # print(request.POST.get("symptom"))
+        # Date = request.POST.get("date")
+        # patient_name= request.POST.get("patient_name")
+        # dbpatient.patientID=patient_name+"%"+str(Date)
+        # print(patient_name+"%"+str(Date))
+        # dbpatient.save()
     return render(request,'home.html')
 
 def saveFeedbackForm(request):
