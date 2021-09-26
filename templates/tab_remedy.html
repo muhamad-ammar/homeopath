@@ -443,9 +443,11 @@
         console.log(vals);
     });
     alert('Hold1');
-    alert(values);
+    values_text=values.toString();
+    alert(values_text);
     alert('Holdx');
-    console.log(values);
+
+
 //     $(document).on('submit', '#form',function (e) {
 
 // var input = $('#keyword').val();
@@ -456,7 +458,7 @@ $.ajax({
     type:'GET',
     url:"{% url 'submit_view' %}",
     data: {
-      'values': values,
+      'values_text': values_text,
       
       
     },
@@ -466,8 +468,8 @@ $.ajax({
   });
 
 });
-    alert('Hold2');
-    $("#hello").html(values);
+    // alert('Hold2');
+    // $("#hello").html(values);
 
 // });
 </script>        

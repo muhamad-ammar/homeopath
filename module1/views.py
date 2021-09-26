@@ -144,7 +144,7 @@ def repo_view(request):
 def submit_view(request):
     if request.method == "GET":
         val_s=request.GET
-        print(val_s)
+        print(val_s['values_text'])
         print(type(val_s))
         # dbpatient=patientData()
         # dbpatient.remedies = request.POST.get("remedies")
