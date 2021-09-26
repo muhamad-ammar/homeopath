@@ -8,8 +8,10 @@ from django.http import JsonResponse,HttpResponse
 # Create your views here.
 from .forms import LoginForm, RegisterForm, searchForm,patientForm,feedbackForm
 from .models import patientData
+from datetime import datetime
 
 User = get_user_model()
+rubricsWithIds ={}
 
 def register_view(request):
     form = RegisterForm(request.POST or None)
@@ -62,7 +64,6 @@ def Home_View(request):
 def search_view(request):
     sym=[]
     rubric=[]
-    global s_form
     sym=[]
     rubric=[]
     pForm=patientForm(request.POST or None)
@@ -78,13 +79,17 @@ def search_view(request):
             symIndex = 0
             for x in jsondata[0]['results']:
                 sym.append([])
-                sym[symIndex].append(x["rubric"]["fullPath"])
+                rubricName = x["rubric"]["fullPath"]
+                sym[symIndex].append(rubricName)
                 crr_sub_sym_rem = ''
                 for y in x['weightedRemedies']:
                     crr_sub_sym_rem += ', ' + y["remedy"]["nameAbbrev"]
                 sym[symIndex].append(crr_sub_sym_rem[2:])
-                sym[symIndex].append(x["rubric"]["id"])
+                rubricId = x["rubric"]["id"]
+                sym[symIndex].append(rubricId)
                 symIndex+=1
+                
+                
             print(sym)
     
                 # print(word['remedy']['nameLong'])
@@ -97,13 +102,11 @@ def search_view(request):
 def table_view(request):
     sym=[]
     rubric=[]
-    print('Hi')
+    global rubricsWithIds
+    
     if request.method=='GET':
-        print('Hello')
         key_s=request.GET
-        print('Hye')
         keyword=key_s['inputValue']
-        print('Bye')
         response = requests.get(f'https://www.oorep.com/api/lookup?symptom={keyword}&repertory=kent&page=0&remedyString=&minWeight=0&getRemedies=1')
         res=response.text          
         jsondata=json.loads(res)
@@ -114,13 +117,18 @@ def table_view(request):
         symIndex = 0
         for x in jsondata[0]['results']:
             sym.append([])
-            sym[symIndex].append(x["rubric"]["fullPath"])
+            rubricName = x["rubric"]["fullPath"]
+            sym[symIndex].append(rubricName)
             crr_sub_sym_rem = ''
             for y in x['weightedRemedies']:
                 crr_sub_sym_rem += ', ' + y["remedy"]["nameAbbrev"]
             sym[symIndex].append(crr_sub_sym_rem[2:])
-            sym[symIndex].append(x["rubric"]["id"])
+            rubricId = x["rubric"]["id"]
+            sym[symIndex].append(rubricId)
             symIndex+=1
+            
+            rubricsWithIds[rubricId]=rubricName
+            
         result = ''
         for x in sym:
             result += "<tr id = "+str(x[2])+">"
@@ -142,11 +150,29 @@ def repo_view(request):
         idsss='abc'
         return HttpResponse(idsss)
 def submit_view(request):
+    global rubricsWithIds
+        
     if request.method == "GET":
-        val_s=request.GET
-        print(val_s['values_text'])
+        val_s=request.GET['values_text'].split(',')[:-1]
+        print(val_s)
         print(type(val_s))
-        # dbpatient=patientData()
+        
+        dbpatient=patientData()
+        pName = val_s.pop(0).split('?')[1]
+        dbpatient.patientID = pName +'%'+ val_s.pop(0).split('?')[1]+'%'+str(datetime.now().strftime("%H:%M:%S"))
+        remies=''
+        for x in val_s:
+            x=x.split('?')
+            rid = int(x.pop(0))
+            remies+=str(rid)+"|"+rubricsWithIds.get(rid)+':'+x[0][1:].replace('||','|')+'?'
+            
+        print(remies,remies[-1])
+        dbpatient.remedies = remies[:-1]
+        dbpatient.save()
+        
+        
+        printAllDB()
+        
         # dbpatient.remedies = request.POST.get("remedies")
         # print(request.POST.get("remedies"))
         # dbpatient.rubrics = request.POST.get("symptom")
@@ -155,12 +181,43 @@ def submit_view(request):
         # patient_name= request.POST.get("patient_name")
         # dbpatient.patientID=patient_name+"%"+str(Date)
         # print(patient_name+"%"+str(Date))
-        # dbpatient.save()
-    return render(request,'home.html')
+       
+    return HttpResponse('Success')
 
 def saveFeedbackForm(request):
     
     return "sads"
+
+def patientFeedbackForm(request):
+    result = ''
+    print('asa')
+    if request.method == 'GET':
+        print('asa')
+        pid=request.GET['inputValue']
+        patient = patientData.objects.get(patientID=pid)
+        name,date,time = pid.split('%')
+        remiesRubrics = []
+        for x in patient.remedies.split('?'):
+            x=x.split(':')
+            temp = [x.pop(0).split("|")[1]]
+            for y in x[0].split('|'):
+                if y != '':
+                    temp.append(y)
+            remiesRubrics.append(temp)
+        print(remiesRubrics)
+        result += "<input type='textfield' name="+name+" value="+name+" disabled>"
+        result += "<input type='textfield' name="+date+" value="+date+" disabled>"
+        result += "<br><br><br>"
+        for x in remiesRubrics:
+            print('\n\n',x)
+            result += "<h3>"+x.pop(0)+"</h3><br>"
+            for y in x:
+                result += "<input type='textfield' name="+y+" value="+y+" disabled>"
+                result += "<input type='range' min='0' max='5' value='3' class='slider' id='myRange'><br>"
+            result += "<br><br>"
+        result += "<button type='submit' class='btn btn-primary' id='saveFeedback' >SAVE FEEDBACK</button>"
+    print(result)
+    return HttpResponse(result)
 
 def feedback_view(request):
     print('Good')
@@ -171,17 +228,14 @@ def feedback_view(request):
     feedNotSubmited = []
     for dat in patient:
         patientarr=[]
-        flag=''
-        date=''
-        patient_name=''
         pid=dat.patientID
         flag=dat.feedback
-        splitid=pid.split('%')
-        patient_name,date=splitid[0],splitid[1]
+        patient_name,date,time=pid.split('%')
         patientarr.append(patient_name)
         patientarr.append(date)
         patientarr.append(flag)
         patientarr.append(pid)
+        patientarr.append(formateTime(time))
         print(dat.feedback," ",type(dat.feedback))
         if dat.feedback == False:
             feedNotSubmited.append(patientarr)
@@ -189,3 +243,25 @@ def feedback_view(request):
             feedSubmited.append(patientarr)
             
     return render(request,'feedback.html',{"feedSubmited":feedSubmited,"feedNotSubmited":feedNotSubmited})
+
+
+def printAllDB():
+    print('\n\n\n')
+    for x in patientData.objects.all():
+        print(x)
+        print(x.patientID)
+        print(x.remedies)
+        
+def formateTime(time):
+    time = time[:5]
+    if int(time[:2]) > 11:
+        h = str(int(time[:2])-12)
+        if h == '0':
+            h = '12'
+        if len(h) == 1:
+            h = '0' + h
+        time = h+time[2:]+" PM"
+    else:
+        time += " AM"
+        
+    return time
