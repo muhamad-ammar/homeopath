@@ -156,8 +156,7 @@
                         </tr>
                         
                 <tbody class ="patient-form">
-                  
-                
+                    
                 </tbody>
                 <tr>
                     <td colspan="2">
@@ -223,8 +222,9 @@
         var col1=currentRow.find("td:eq(0)").text();
         // var colname=col1.replace(", ","_");
         // var col= colname.replace(",","-");
-        var div1 = "<tr id=t"+me+"><td class = 'col-lg-6'>"+col1+"</td>";
-        var div2 = "<td class = 'col-lg-5'><div><div style='float: left; width: 78% !important;'><input type ='text' style='width:90%' class='search-store' name="+me+" id=s"+me+"></div><div id="+me+" style='float: right; width: 9% !important;border: 1px solid;' class='btn btn-success' onclick='store(this.id)'>+</div><div id="+me+" style='float: right; width: 9% !important;border: 1px solid;' class='btn btn-danger' onclick='delstore(this.id)'>-</div><div style='clear:both'></div><p style='border:1px' contentEditable='true' id=i"+me+" class = 'form-control'></p></div></td></tr>";
+        var div1 = "<tr id=t"+me+" class='ridentifier'><td class = 'col-lg-6'>"+col1+"</td>";
+        var div2 = "<td class = 'col-lg-5'><div><div style='float: left; width: 78% !important;'><input type ='text' style='width:90%' class='search-store' name="+me+" id=s"+me+"></div><div id="+me+" style='float: right; width: 9% !important;border: 1px solid;' class='btn btn-success' onclick='store(this.id)'>+</div><div id="+me+" style='float: right; width: 9% !important;border: 1px solid;' class='btn btn-danger' onclick='delstore(this.id)'>-</div><div style='clear:both'></div><p style='border:1px' contentEditable='true' id=i"+me+" class = 'form-control' onkeyup='myFunction("+me+")'></p></div><div  id=d"+me+"></div></td></tr>";
+        
         result = div1+div2;
         $(".patient-form").append(result);
         $( "#ids" ).val( function( index, val ) {
@@ -290,13 +290,32 @@
 
         // }); {% endcomment %}
         </script>
-    <!-- <script>
+    <script>
+    var idOfP = "";
+    var idForDiv = 1;
+    function myFunction(idForAll) {
+        idOfP=idForAll;
 
-        const searchInput = document.querySelector('#search-input');
-        const suggestionsPanel = document.querySelector('#suggestions');
-
-        searchInput.addEventListener('keyup', function() {
+        const suggestionsPanel = document.getElementById("d"+idForAll);
+        var input = document.getElementById("i"+idForAll).textContent;;
+        document.getElementById("d"+idForAll).innerHTML = '';
+        const suggestions = remiesList.filter(function(remies) {
+            return remies.toLowerCase().startsWith(input.toLowerCase());
+        });
+        suggestions.forEach(function(suggested) {
+            const div = document.createElement('div');
+            div.setAttribute("id", idForDiv+'remDiv');
+            div.setAttribute("onclick", "myAutoFunction("+"'"+suggested+"'"+")");
+            idForDiv = idForDiv+1;
+            div.innerHTML = suggested;
+            suggestionsPanel.appendChild(div);
+        });
+        if (input === '') {
+            suggestionsPanel.innerHTML = '';  
+        }
+        {% comment %} searchInput.addEventListener('keyup', function() {
             const input = searchInput.value;
+            console.log(input);
             suggestionsPanel.innerHTML = '';
             const suggestions = remiesList.filter(function(remies) {
                 return remies.toLowerCase().startsWith(input.toLowerCase());
@@ -311,10 +330,19 @@
             if (input === '') {
                 suggestionsPanel.innerHTML = '';  
             }
-        })
+        }) {% endcomment %}
         
-        
-    </script> -->
+    }
+    </script>
+    <script>
+        {% comment %} console.log(document.getElementsByClassName("autocomplete-items-class")) 
+        document.getElementsByClassName("autocomplete-items-class").onclick = function() {myAutoFunction()}; {% endcomment %}
+        function myAutoFunction(textOfdiv) {
+            console.log("hellooooo")
+            console.log(textOfdiv)
+            document.getElementById("i"+idOfP).innerHTML = textOfdiv;
+        }
+    </script>
     <script>
         {% comment %} function autocomplete(inp, arr) {
           /*the autocomplete function takes two arguments,

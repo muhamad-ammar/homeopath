@@ -90,7 +90,6 @@ def search_view(request):
                 symIndex+=1
                 
                 
-            print(sym)
     
                 # print(word['remedy']['nameLong'])
                 # print(jsondata[0]['results'][0]['weightedRemedies'][""]['remedy']['nameLong'])
@@ -143,10 +142,7 @@ def repo_view(request):
         id_s=request.GET
         ids=id_s['id_data']
         id_arr=ids.split(',')
-        print(id_arr)
         # ids=id_s['ids']
-        print(ids)
-        print('Call working')
         idsss='abc'
         return HttpResponse(idsss)
 def submit_view(request):
@@ -154,8 +150,6 @@ def submit_view(request):
         
     if request.method == "GET":
         val_s=request.GET['values_text'].split(',')[:-1]
-        print(val_s)
-        print(type(val_s))
         
         dbpatient=patientData()
         pName = val_s.pop(0).split('?')[1]
@@ -166,12 +160,11 @@ def submit_view(request):
             rid = int(x.pop(0))
             remies+=str(rid)+"|"+rubricsWithIds.get(rid)+':'+x[0][1:].replace('||','|')+'?'
             
-        print(remies,remies[-1])
         dbpatient.remedies = remies[:-1]
         dbpatient.save()
         
         
-        printAllDB()
+        # printAllDB()
         
         # dbpatient.remedies = request.POST.get("remedies")
         # print(request.POST.get("remedies"))
@@ -190,9 +183,7 @@ def saveFeedbackForm(request):
 
 def patientFeedbackForm(request):
     result = ''
-    print('asa')
     if request.method == 'GET':
-        print('asa')
         pid=request.GET['inputValue']
         patient = patientData.objects.get(patientID=pid)
         name,date,time = pid.split('%')
@@ -204,23 +195,21 @@ def patientFeedbackForm(request):
                 if y != '':
                     temp.append(y)
             remiesRubrics.append(temp)
-        print(remiesRubrics)
+        
         result += "<input type='textfield' name="+name+" value="+name+" disabled>"
         result += "<input type='textfield' name="+date+" value="+date+" disabled>"
         result += "<br><br><br>"
         for x in remiesRubrics:
-            print('\n\n',x)
             result += "<h3>"+x.pop(0)+"</h3><br>"
             for y in x:
-                result += "<input type='textfield' name="+y+" value="+y+" disabled>"
-                result += "<input type='range' min='0' max='5' value='3' class='slider' id='myRange'><br>"
+                result += "<input type='textfield' name="+y+" value="+y+" disabled> 0 "
+                result += "<input type='range' min='0' max='5' value='3' class='slider' id='myRange'> 5 <br>"
             result += "<br><br>"
         result += "<button type='submit' class='btn btn-primary' id='saveFeedback' >SAVE FEEDBACK</button>"
-    print(result)
     return HttpResponse(result)
 
 def feedback_view(request):
-    print('Good')
+    
     patient=patientData.objects.all()
     result=[]
     
