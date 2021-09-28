@@ -178,8 +178,10 @@ def submit_view(request):
     return HttpResponse('Success')
 
 def saveFeedbackForm(request):
-    
-    return "sads"
+    if request.method == 'GET':
+        pid=request.GET
+        print(pid)
+    return redirect(feedback_view)
 
 def patientFeedbackForm(request):
     result = ''
@@ -196,14 +198,16 @@ def patientFeedbackForm(request):
                     temp.append(y)
             remiesRubrics.append(temp)
         
-        result += "<input type='textfield' name="+name+" value="+name+" disabled>"
-        result += "<input type='textfield' name="+date+" value="+date+" disabled>"
+        result += "<h5>"+name+" </h5>"
+        result += "<h5>"+date+"</h5>"
         result += "<br><br><br>"
         for x in remiesRubrics:
-            result += "<h3>"+x.pop(0)+"</h3><br>"
+            z=x.pop(0)
+            zx=z.replace(', ','_')
+            result += "<h3>"+z+"</h3><br>"
             for y in x:
-                result += "<input type='textfield' name="+y+" value="+y+" disabled> 0 "
-                result += "<input type='range' min='0' max='5' value='3' class='slider' id='myRange'> 5 <br>"
+                result += "<p>"+y+"</p> 0 "
+                result += "<div id="+zx+"><input type='range' min='0' max='5' value='3' class='slider' name="+zx+'?'+y+"> 5 <div><br>"
             result += "<br><br>"
         result += "<button type='submit' class='btn btn-primary' id='saveFeedback' >SAVE FEEDBACK</button>"
     return HttpResponse(result)
