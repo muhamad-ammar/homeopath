@@ -27,20 +27,8 @@
                 
                 <form method='POST' action="{% url 'home' %}" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <input type="textfield" name="{{patient_name}}" value="{{patient_name}}" disabled>
-                    <input type="textfield" name="{{date}}" value="{{date}}" disabled>
-                    <br>
-                    <br>
-                    <input type="textfield" name="{{remedy.0}}" value="{{remedy.0}}" disabled>
-                    <input type="range" min="1" max="5" value="3" class="slider" id="myRange">
-                    <br>
-                    <input type="textfield" name="{{remedy.1}}" value="{{remedy.1}}" disabled>
-                    <input type="range" min="1" max="5" value="3" class="slider" id="myRange">
-                    <br>
-                    <input type="textfield" name="{{remedy.2}}" value="{{remedy.2}}" disabled>
-                    <input type="range" min="1" max="5" value="3" class="slider" id="myRange">
-                    <br>
-                <button type='submit' id=btn class='{{ btn_class }}'>{% if submit_btn %} {{ submit_btn }} {% else %}Find {% endif %}</button>
+                    <div id="feedBackDiv"></div>
+                {% comment %} <button type='submit' id=btn class='{{ btn_class }}'>{% if submit_btn %} {{ submit_btn }} {% else %}SAVE FEEDBACK {% endif %}</button> {% endcomment %}
                 </form>
             </div>
         </div>
@@ -57,7 +45,8 @@
                         <thead class="bill-header cs">
                             <tr>
                                 <th id="trs-hd" class="col-lg-2">Patient Name</th>
-                                <th id="trs-hd" class="col-lg-3">Date</th>
+                                <th id="trs-hd" class="col-lg-2">Date</th>
+                                <th id="trs-hd" class="col-lg-2">time</th>
                                 <th id="trs-hd" class="col-lg-1">Feedback</th>
                             </tr>
                         </thead>
@@ -66,6 +55,7 @@
                             <tr>                            
                                 <td >{{x.0}}</td>
                                 <td >{{x.1}}</td>
+                                <td >{{x.4}}</td>
                                 <td id='useless'>                            
                                     <div class="abc"><input type='submit' class='btn btn-danger'  id='{{x.3}}' value='Add feedback' name='Hello'></div>
                                 </td>
@@ -129,23 +119,27 @@
     // $("#tbody1").html(result);
 </script>
 <script>
- $(document).on('click','.abc input',function() {
-     var me = $(this).attr('id');
-     alert(me);
-     e.preventDefault();
+
+
+ $(document).on('click', '.abc input',function (e) {
+
+        var pid = $(this).attr('id');
+        alert(pid);
+        e.preventDefault();
 
         $.ajax({
             type:'GET',
-            url:"{% url 'search' %}",
+            url:"{% url 'patientFeedbackForm' %}",
             data: {
-              'inputValue': input,
+              'inputValue': pid,
               
               
             },
             success: function (data) {
-                $("#tbody1").html(data);
+                $("#feedBackDiv").html(data);
             }
           });
- });
+
+        });
 </script>
 {% endblock content %}

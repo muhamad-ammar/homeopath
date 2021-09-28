@@ -9,11 +9,11 @@
     {
         display: none;
     }
-    #search-store
+    .search-store
     {
         border: none !important;
         pointer-events:none;
-        background:rgb(187, 186, 186);
+        background:rgb(233, 233, 233);
     }
     .autocomplete-items {
   position: absolute;
@@ -137,7 +137,7 @@
     <div class="container">
         <div class="col-md-12 search-table-col">
             <div class="table-responsive d table table-hover  results">
-                <form method='POST' action="{% url 'submit_view' %}">
+                <form id="patientform">
                     <table class="table table-bordered table-hover" id="table2">
                         <thead class="bill-header cs">
                             <tr>
@@ -148,11 +148,11 @@
                         </thead>
                         <tr>
                             <td class="col-sm-6 col-md-6 col-lg-6">Patient Name</td>
-                            <td class="col-sm-6 col-md-6 col-lg-5"><input type ='text' class = 'form-control' id="patient_name" placeholder="e.g. Ali"></td>
+                            <td class="col-sm-6 col-md-6 col-lg-5"><input type ='text' class = 'form-control' name="pname" id="patient_name" placeholder="e.g. Ali"></td>
                         </tr>
                         <tr>
                             <td class="col-sm-6 col-md-6 col-lg-6">Date</td>
-                            <td class="col-sm-6 col-md-6 col-lg-5"><input type ='date' class = 'form-control' id="patient_name" ></td>
+                            <td class="col-sm-6 col-md-6 col-lg-5"><input type ='date' class = 'form-control' name='date' id="date" ></td>
                         </tr>
                         
                 <tbody class ="patient-form">
@@ -221,8 +221,10 @@
         var result = "";
         var currentRow=$(this).closest("tr");
         var col1=currentRow.find("td:eq(0)").text();
-        var div1 = "<tr><td class = 'col-lg-6'>"+col1+"</td>";
-        var div2 = "<td class = 'col-lg-5'><input type ='text' class = 'form-control'></td></tr>";
+        // var colname=col1.replace(", ","_");
+        // var col= colname.replace(",","-");
+        var div1 = "<tr id=t"+me+"><td class = 'col-lg-6'>"+col1+"</td>";
+        var div2 = "<td class = 'col-lg-5'><div><div style='float: left; width: 78% !important;'><input type ='text' style='width:90%' class='search-store' name="+me+" id=s"+me+"></div><div id="+me+" style='float: right; width: 9% !important;border: 1px solid;' class='btn btn-success' onclick='store(this.id)'>+</div><div id="+me+" style='float: right; width: 9% !important;border: 1px solid;' class='btn btn-danger' onclick='delstore(this.id)'>-</div><div style='clear:both'></div><p style='border:1px' contentEditable='true' id=i"+me+" class = 'form-control'></p></div></td></tr>";
         result = div1+div2;
         $(".patient-form").append(result);
         $( "#ids" ).val( function( index, val ) {
@@ -411,14 +413,61 @@
           });
         } {% endcomment %}
         {% comment %} autocomplete($('.search-input'), remiesList); {% endcomment %}
-        function store(){
-            var current=$('#search-input').val();
+        function store(id){
+            var current=$('#i'+id).text();
             console.log(current);
-        $( "#search-store" ).val( function( index, val ) {
-            $('#search-input').val('');
-            return val +"%"+current;
+        $( "#s"+id ).val( function( index, val ) {
+            $('#i'+id).text('');
+            return val +"|"+current;
             
             });  
-        };
+        }
+        function delstore(id){
+            var current=$('#i'+id).val();
+            console.log(current);
+        return $( "#s"+id ).val("")
+        }
+   
+    $('#patientform').submit(function() {
+    // get all the inputs into an array.
+    var $inputs = $('#patientform :input');
+    // not sure if you wanted this, but I thought I'd add it.
+    // get an associative array of just the values.
+
+    var values = [];
+    $inputs.each(function() {
+        name=this.name;
+        value=$(this).val();
+        vals=name+'?'+value;
+        values.push(vals);
+        console.log(vals);
+    });
+    values_text=values.toString();
+
+
+//     $(document).on('submit', '#form',function (e) {
+
+// var input = $('#keyword').val();
+
+// e.preventDefault();
+
+$.ajax({
+    type:'GET',
+    url:"{% url 'submit_view' %}",
+    data: {
+      'values_text': values_text,
+      
+      
+    },
+    success: function (data) {
+        console.log(data);
+    }
+  });
+
+});
+    // alert('Hold2');
+    // $("#hello").html(values);
+
+// });
 </script>        
 {% endblock content %}
