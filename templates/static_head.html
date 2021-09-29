@@ -25,13 +25,19 @@
                 <ul class="nav navbar-nav nav-right">
                     <li class="nav-item" role="presentation"><a class="nav-link active" style="color: white;" href="index.html">home </a></li>
                     <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" style="color: white;" data-toggle="dropdown" aria-expanded="false" href="#">Services </a>
-                        <div class="dropdown-menu" role="menu"><a class="dropdown-item" role="presentation" href="services.html">Price Packages</a><a class="dropdown-item" role="presentation" href="#">Order Services</a><a class="dropdown-item" role="presentation" href="#">Custom Request</a></div>
+                        <div class="dropdown-menu" role="menu"><a class="dropdown-item" role="presentation" href="{% url 'search_view' %}">Search</a><a class="dropdown-item" role="presentation" href="#">Order Services</a><a class="dropdown-item" role="presentation" href="#">Custom Request</a></div>
                     </li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" style="color: white;" href="about.html">about </a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" style="color: white;" href="faq.html">faq </a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" style="color: white;" href="contact.html">contact </a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" style="color: white;" href="#">About Us </a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" style="color: white;" href="{% url 'feedback_view' %}">Feedback </a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" style="color: white;" href="#"> </a>contact</li>
                 </ul>
+                {% if user.is_authenticated %}
                 <p class="ml-auto navbar-text actions"><a class="login"style="color: white;" href="{% url 'login' %}">Log In</a> <a class="btn btn-light action-button" style="color: white;" role="button" href="{% url 'register' %}">Sign Up</a></p>
+                {% else %}
+                <p class="ml-auto navbar-text actions"><a class="login"style="color: white;" href="{% url 'logout' %}">Log Out</a> </p>
+                {% endif %}
+                
+        
         </div>
         </div>
     </nav>
