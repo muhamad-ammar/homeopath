@@ -61,10 +61,26 @@
                                 </td>
                             </tr>
                             {% endfor %}
+                        </tbody> 
+                    </table>
+                    
+                </div>
+                <div class="table-responsive table-bordered table table-hover table-bordered results">
+                    <table class="table table-bordered table-hover" id="table1">
+                        <thead class="bill-header cs">
+                            <tr>
+                                <th id="trs-hd" class="col-lg-2">Patient Name</th>
+                                <th id="trs-hd" class="col-lg-2">Date</th>
+                                <th id="trs-hd" class="col-lg-2">time</th>
+                                <th id="trs-hd" class="col-lg-1">Feedback</th>
+                            </tr>
+                        </thead>
+                        <tbody id='tbody1'>
                         {% for x in feedSubmited %} 
                             <tr>                            
                                 <td >{{x.0}}</td>
                                 <td >{{x.1}}</td>
+                                <td >{{x.4}}</td>
                                 <td id='useless'>                            
                                     <div class="abc"><input type='submit' class='btn btn-success'  value='Submitted' id='{{x.3}}' ></div>
                                 </td>
@@ -112,7 +128,6 @@
  $(document).on('click', '.abc input',function (e) {
 
         var pid = $(this).attr('id');
-        alert(pid);
         e.preventDefault();
 
         $.ajax({

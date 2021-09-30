@@ -9,3 +9,7 @@ class patientData(models.Model):
     feedback=models.BooleanField(default=0)
     # rubrics = models.CharField(max_length=100)
     
+class updatedWeights(models.Model):
+    patientID = models.CharField(max_length=100)
+    rubricRemedies = models.CharField(max_length=200)
+    weight=models.IntegerField()

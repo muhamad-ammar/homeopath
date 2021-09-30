@@ -7,11 +7,12 @@ from django.urls import reverse
 from django.http import JsonResponse,HttpResponse
 # Create your views here.
 from .forms import LoginForm, RegisterForm, searchForm,patientForm,feedbackForm
-from .models import patientData
+from .models import patientData,updatedWeights
 from datetime import datetime
 
 User = get_user_model()
 rubricsWithIds ={}
+sliderNameList = []
 
 def register_view(request):
     form = RegisterForm(request.POST or None)
@@ -138,6 +139,7 @@ def table_view(request):
             result += "<button type = 'submit' value='Add This' id = "+str(x[2])+" class = 'btn btn-success'  >Add This</button></div></td>"
             result += '</tr>'
         return HttpResponse(result)
+    
 def repo_view(request):
     if request.method=='GET':
         id_s=request.GET
@@ -146,6 +148,7 @@ def repo_view(request):
         # ids=id_s['ids']
         idsss='abc'
         return HttpResponse(idsss)
+    
 def submit_view(request):
     global rubricsWithIds
         
@@ -182,12 +185,27 @@ def saveFeedbackForm(request):
     if request.method == 'GET':
         pid=request.GET
         print(pid)
+        patientID = sliderNameList.pop(0)
+        for x in sliderNameList:
+            feedback = updatedWeights()
+            feedback.patientID = patientID
+            feedback.rubricRemedies = x
+            print(x)
+            feedback.weight = pid[x.replace(', ','_')]
+            feedback.save()
+            
+        dbpatient=patientData.objects.get(patientID=patientID)
+        dbpatient.feedback = True
+        dbpatient.save(update_fields=["feedback"])        
+        
     return redirect(feedback_view)
 
 def patientFeedbackForm(request):
     result = ''
+    global sliderNameList
     if request.method == 'GET':
         pid=request.GET['inputValue']
+        sliderNameList = [pid]
         patient = patientData.objects.get(patientID=pid)
         name,date,time = pid.split('%')
         remiesRubrics = []
@@ -207,10 +225,19 @@ def patientFeedbackForm(request):
             zx=z.replace(', ','_')
             result += "<h3>"+z+"</h3><br>"
             for y in x:
-                result += "<p>"+y+"</p> 0 "
-                result += "<div id="+zx+"><input type='range' min='0' max='5' value='3' class='slider' name="+zx+'?'+y+"> 5 <div><br>"
+                sliderName = zx+'?'+y
+                sliderNameList.append(sliderName.replace('_',', '))
+                result += "<p>"+y+"</p>"
+                if patient.feedback == False:
+                    result += "<div id="+zx+">0 <input type='range' min='0' max='5' value='3' class='slider' name='"+sliderName+"'> 5 <div><br>"
+                else:
+                    givenWeight = str(updatedWeights.objects.get(patientID=pid, rubricRemedies=sliderName.replace('_',', ')).weight)
+                    result += "<div id="+zx+"><input type='range' min='0' max='5' value='"+givenWeight+"' class='slider' name='"+sliderName+"' disabled> "+givenWeight+" <div><br>"
             result += "<br><br>"
-        result += "<button type='submit' class='btn btn-primary' id='saveFeedback' >SAVE FEEDBACK</button>"
+        
+        if patient.feedback == False:
+            result += "<button type='submit' class='btn btn-primary' id='saveFeedback' >SAVE FEEDBACK</button>"
+            
     return HttpResponse(result)
 @login_required
 def feedback_view(request):
