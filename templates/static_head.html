@@ -32,9 +32,9 @@
                     <li class="nav-item" role="presentation"><a class="nav-link" style="color: white;" href="#"> </a>contact</li>
                 </ul>
                 {% if user.is_authenticated %}
-                <p class="ml-auto navbar-text actions"><a class="login"style="color: white;" href="{% url 'login' %}">Log In</a> <a class="btn btn-light action-button" style="color: white;" role="button" href="{% url 'register' %}">Sign Up</a></p>
-                {% else %}
                 <p class="ml-auto navbar-text actions"><a class="login"style="color: white;" href="{% url 'logout' %}">Log Out</a> </p>
+                {% else %}
+                <p class="ml-auto navbar-text actions"><a class="login"style="color: white;" href="{% url 'login' %}">Log In</a> <a class="btn btn-light action-button" style="color: white;" role="button" href="{% url 'register' %}">Sign Up</a></p>
                 {% endif %}
                 
         
