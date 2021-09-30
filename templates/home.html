@@ -8,7 +8,15 @@
 {% endblock title %}
 {% block content %}
 <style> 
-#btn{color:#fff;background-color:#d84b6b;border-radius:20px;border:none;width:150px;display:block;margin:10px auto 0;line-height:25px}
+#btn{color:#fff;border-radius:20px;border:none;width:150px;display:block;margin:10px auto 0;line-height:25px}
+h1
+{
+    font-family: 'Dancing Script', cursive,Georgia, 'Times New Roman', Times, serif;
+}
+#btn:hover
+{
+    transform: scale(1.2);
+}
 </style>
 <script src="https://use.fontawesome.com/4672b084a3.js"></script>
 <header class="masthead text-white text-center" style="background: url('https://res.cloudinary.com/ammar992/image/upload/v1630906356/Untitled_design_6_ahdwfm.png') no-repeat center center; background-size:cover;" >
@@ -24,29 +32,29 @@
                         <div class="col-12 col-md-3"><button class="btn btn-block btn-lg" type="submit" style="background-color: #D84B6B; color: white;">Sign up!</button></div>
                     </div>
                 </form> -->
-                <a href="{% url 'search_view' %}"><button id='btn'>Start Search</button></a>
+                <a href="{% url 'search_view' %}" ><button id='btn' class="btn btn-danger rounded-pill animated pulse"> <i>Search</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-search"></i></button></a>
             </div>
         </div>
     </div>
 </header>
 <br>
 <br>
-<header class="container"  style="width: 100% !important; ">
+<header class="container"  style="width: 100% !important; padding-left:8%">
     <div class="row" >
         <div class="col-md-4 content-boxes-v6 md-margin-bottom-50">
-            <img src="https://res.cloudinary.com/ammar992/image/upload/v1630845745/1_ufuurh.png" style="width:50%; height:60%;">
+            <i class="fa fa-3x"><i class="fa fa-signal fa-4x text-danger" ></i></i>
             <br>
             <h4 class="title-v3-md text-uppercase " style="margin-top: 10%;">Full repertory</h4>
             <p>Browse through the whole Kent Repertory, with the corresponding remedies.</p>
         </div>
         <div class="col-md-4 content-boxes-v6 md-margin-bottom-50">
-            <img src="https://res.cloudinary.com/ammar992/image/upload/v1630845745/2_r7frwa.png" style="width:50%; height:60%;">
+            <i class="fa fa-3x"><i class="fa fa-thumbs-up fa-4x text-danger"></i></i>
             <br>
             <h4 class="title-v3-md text-uppercase" style="margin-top: 10%;">Completely free</h4>
             <p>Access everything, completely free of charge.</p>
         </div>
         <div class="col-md-4 content-boxes-v6">
-            <img src="https://res.cloudinary.com/ammar992/image/upload/v1630845745/3_tskhvl.png" style="width:50%; height:60%;">
+            <i class="fa fa-3x"><i class="fa fa-sync fa-4x text-danger"></i></i>
             <br>
             <h4 class="title-v3-md text-uppercase" style="margin-top: 10%;">Powerful slides</h4>
             <p >At vero eos et accusato odio dignissimos ducimus qui blanditiis praesentium voluptatum.</p>

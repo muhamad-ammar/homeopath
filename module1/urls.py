@@ -1,11 +1,16 @@
 from os import name
 from django.contrib import admin
 from django.urls import path,re_path
+
+from django.contrib.auth.views import LogoutView
+from django.conf.urls import url
 from .views import feedback_view, login_view, logout_view,Home_View, register_view,search_view,table_view,submit_view,repo_view,saveFeedbackForm,patientFeedbackForm
+
 urlpatterns = [
 
     path('login/', login_view,name="login"),
     path('logout/', logout_view,name="logout"),
+    # path("logout/", LogoutView.as_view(), name="logout"),
     path('register/', register_view,name="register"),
     path('', Home_View,name="home"),
     path('search_view',search_view,name='search_view'),

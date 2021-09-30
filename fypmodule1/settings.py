@@ -76,7 +76,7 @@ WSGI_APPLICATION = 'fypmodule1.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
+LOGIN_REDIRECT_URL = 'main/index'
 DATABASES = {
         # 'default': {
         #     'ENGINE': 'django.db.backends.postgresql_psycopg2', 
@@ -91,7 +91,7 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
     }
-
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 
 # Password validation
