@@ -25,7 +25,14 @@
 #myFooter .google:hover{color:#ef1a1a}
 #myFooter .twitter:hover{color:#00aced}
 #myFooter .linkedin:hover{color:#007BB6}
-#myFooter .btn{color:#fff;background-color:#d84b6b;border-radius:20px;border:none;width:150px;display:block;margin:10px auto 0;line-height:25px}
+#btn:hover
+{
+    transform: scale(1.2);
+}
+a:hover
+{
+    transform: scale(1.2);
+}
 @media screen and (max-width:767px){#myFooter{text-align:center}}
 
     </style>
@@ -40,25 +47,22 @@
                 <div class="col-12 col-sm-6 col-md-2">
                     <h5>Get started</h5>
                     <ul>
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Downloads<br></a></li>
-                        <li><a href="#">Sign Up</a></li>
-                        <li><a href="#">Other Links</a></li>
+                        <li role="presentation"><a class="nav-link" style="color: white;" href="{% url 'feedback_view' %}">Feedback </a></li>
+                        <li role="presentation"><a class="nav-link" style="color: white;" href="{% url 'search_view' %}">Search</a></li>
                     </ul>
                 </div>
                 <div class="col-12 col-sm-6 col-md-2">
                     <h5>Our Company</h5>
                     <ul>
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Company Information<br></a></li>
-                        <li><a href="#">Reviews</a></li>
-                        <li><a href="#">Contacts</a></li>
+                    <li role="presentation"><a class="nav-link" style="color: white;" href="{% url 'home' %}">Home</a></li>
+                    <li role="presentation"><a class="nav-link" style="color: white;" href="#">About Us </a></li>
+                    <li role="presentation"><a class="nav-link" style="color: white;" href="#">Contact</a></li>
                     </ul>
                 </div>
                 <div class="col-md-3 social-networks">
                     <div></div><a class="facebook" href="#"><i class="fa fa-facebook"></i></a><a class="twitter" href="#"><i class="fa fa-twitter"></i></a><a class="google" href="#"><i class="fa fa-google-plus"></i></a><a class="linkedin" href="#"><i class="fa fa-linkedin"></i></a>
-                    <button
-                        class="btn btn-primary" style="margin-top:20px;" type="button">Contact us</button>
+                    <br>
+                    <button id='btn' class="btn btn-danger rounded-pill" style="margin-top:20px;" >Contact us</button>
                 </div>
             </div>
             <div class="row footer-copyright">
