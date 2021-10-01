@@ -8,7 +8,81 @@
 {% endblock title %}
 {% block content %}
 <style> 
-#btn{color:#fff;background-color:#d84b6b;border-radius:20px;border:none;width:150px;display:block;margin:10px auto 0;line-height:25px}
+#bt_n{color:#fff;background-color:#d84b6b;border-radius:20px;border:none;width:150px;display:block;margin:10px auto 0;line-height:25px} 
+::-webkit-scrollbar {
+    width: 7px;               /* width of the entire scrollbar */
+  }
+  
+  #log_form::-webkit-scrollbar-track {
+    background: rgb(255, 255, 255);        /* color of the tracking area */
+  }
+  
+  #log_form::-webkit-scrollbar-thumb {
+    background-color: #d84b6b;    /* color of the scroll thumb */
+    border-radius: 20px;       /* roundness of the scroll thumb */
+    border: 1px solid rgb(240, 114, 166);  /* creates padding around scroll thumb */
+  }
+#btn
+{
+	top:  0;
+	left: 0;
+	position: absolute;
+	width: 170px;
+	height: 100%;
+	border-radius: 30px;
+	transition: .5s;
+    
+}
+.log_form
+{
+	width:85%;
+	height: 50vh;
+    position:relative;
+	margin:auto;
+	background:#fff;
+	padding: 5px; 
+    overflow-y: scroll;
+    border: 1px solid lightgrey;
+}
+.button_box
+{
+	width: 350px;
+margin: 35px auto;
+position: relative;
+box-shadow: 0 0 20px 9px #0099dd1f;
+border-radius: 30px;
+}
+.toggle
+{
+	padding: 10px 30px;
+	cursor: pointer;
+	background: transparent;
+	border: 0;
+	outline: none;
+	position: relative;
+}
+#reg
+{
+left: 100%;
+}
+#login
+{
+left: 0px;
+}
+.inputs
+{
+	top:10px;
+	position: absolute;
+	width: 100%;
+	transition: .5s;
+	font-family: Berkshire Swash, georgia;
+}
+#submit,#notsubmit
+{
+    width: 170px !important;
+    outline: none;
+
+}
 </style>
 <script src="https://use.fontawesome.com/4672b084a3.js"></script>
 <header class="masthead text-white text-center" style="background: url('https://res.cloudinary.com/ammar992/image/upload/v1630906356/Untitled_design_6_ahdwfm.png') no-repeat center center; background-size:cover;" >
@@ -17,26 +91,93 @@
             <div class="col-xl-9 mx-auto">
                 <h1 class="mb-5">Ailments are treated by minute doses of natural substances that in larger amounts</h1>
             </div>
-            <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
-                <!-- <form>
-                    <div class="form-row">
-                        <div class="col-12 col-md-9 mb-2 mb-md-0"><input class="form-control form-control-lg" type="email" placeholder="Enter your email..."></div>
-                        <div class="col-12 col-md-3"><button class="btn btn-block btn-lg" type="submit" style="background-color: #D84B6B; color: white;">Sign up!</button></div>
-                    </div>
-                </form> -->
-                
-                <form id="feedform" method="GET" enctype="multipart/form-data" action="{% url 'saveFeedbackForm' %}">
-            
-                    <div id="feedBackDiv"></div>
-                {% comment %} <button type='submit' id=btn class='{{ btn_class }}'>{% if submit_btn %} {{ submit_btn }} {% else %}SAVE FEEDBACK {% endif %}</button> {% endcomment %}
-                </form>
-            </div>
+           
         </div>
     </div>
 </header>
-<br>
-<br>
-<header class="container"  style="width: 100% !important; ">
+    <!--Main div -->
+        <div style="margin-bottom: 23px">
+    <!--1st child div -->
+    <div class="button_box">
+        <div id="btn" class="btn" id="btntoggle"></div>
+        <button type="button" id=notsubmit class="toggle" onclick="ns()" style="float: left;">Not Submitted</button>
+        
+        <button type="button" id=submit class="toggle" onclick="s()" style="padding: 10px 10px 10px 30px; float: left;">Submitted</button>
+        <div style="clear: both;"></div>
+    </div>
+    <div class="log_form">
+                <div class="inputs" id="login">
+                    <table class="table table-bordered table-hover" id="table1">
+                        <thead class="bill-header cs">
+                            <tr>
+                                <th id="trs-hd" class="col-lg-2">Patient Name</th>
+                                <th id="trs-hd" class="col-lg-2">Date</th>
+                                <th id="trs-hd" class="col-lg-2">time</th>
+                                <th id="trs-hd" class="col-lg-1">Feedback</th>
+                            </tr>
+                        </thead>
+                        <tbody id='tbody1'>
+                        {% for x in feedNotSubmited %} 
+                            <tr>                            
+                                <td >{{x.0}}</td>
+                                <td >{{x.1}}</td>
+                                <td >{{x.4}}</td>
+                                <td id='useless'>                            
+                                    <div class="abc"><input type='submit' class='btn btn-danger'  id='{{x.3}}' value='Add feedback' name='Hello'></div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody> 
+                    </table>
+                </div>
+                <div class="inputs" id="reg">
+                    <table class="table table-bordered table-hover" id="table1">
+                        <thead class="bill-header cs">
+                            <tr>
+                                <th id="trs-hd" class="col-lg-2">Patient Name</th>
+                                <th id="trs-hd" class="col-lg-2">Date</th>
+                                <th id="trs-hd" class="col-lg-2">time</th>
+                                <th id="trs-hd" class="col-lg-1">Feedback</th>
+                            </tr>
+                        </thead>
+                        <tbody id='tbody1'>
+                        {% for x in feedSubmited %} 
+                            <tr>                            
+                                <td >{{x.0}}</td>
+                                <td >{{x.1}}</td>
+                                <td >{{x.4}}</td>
+                                <td id='useless'>                            
+                                    <div class="abc"><input type='submit' class='btn btn-success'  value='Submitted' id='{{x.3}}' ></div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody> 
+                    </table>
+                    
+                </div>
+            </div>
+
+        </div>
+        <div class="container" style="padding: 5% 5% 10% 5% !important;">
+            <div class="row">
+                <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+                    <!-- <form>
+                        <div class="form-row">
+                            <div class="col-12 col-md-9 mb-2 mb-md-0"><input class="form-control form-control-lg" type="email" placeholder="Enter your email..."></div>
+                            <div class="col-12 col-md-3"><button class="btn btn-block btn-lg" type="submit" style="background-color: #D84B6B; color: white;">Sign up!</button></div>
+                        </div>
+                    </form> -->
+                    
+                    <form id="feedform" method="GET" enctype="multipart/form-data" action="{% url 'saveFeedbackForm' %}">
+                
+                        <div id="feedBackDiv"></div>
+                    {% comment %} <button type='submit' id=btn class='{{ btn_class }}'>{% if submit_btn %} {{ submit_btn }} {% else %}SAVE FEEDBACK {% endif %}</button> {% endcomment %}
+                    </form>
+                </div>
+            </div>
+        </div>    
+
+<!-- <header class="container"  style="width: 100% !important; ">
     <div class="row" >
         <div class="container">
             <div class="col-md-12 search-table-col">
@@ -91,7 +232,7 @@
                     
                 </div>
             </div>
-        </div>
+        </div> -->
         <!-- <div class="col-md-4 content-boxes-v6 md-margin-bottom-50">
             <img src="https://res.cloudinary.com/ammar992/image/upload/v1630845745/1_ufuurh.png" style="width:50%; height:60%;">
             <br>
@@ -123,7 +264,40 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="  crossorigin="anonymous" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-
+<script>
+		
+	var	x=document.getElementById('login');
+	var y=document.getElementById('reg');
+	var z=document.getElementById('btn');
+    document.getElementById('notsubmit').style.color="white";
+    document.getElementById("MyElement").classList.add('btn-danger');
+    
+		
+	function s(){
+		x.style.left="-100%";
+		y.style.left="0px";
+		z.style.left="180px";
+        document.getElementById('notsubmit').style.color="black";
+        document.getElementById('submit').style.color="white";
+        document.getElementById("MyElement").classList.add('btn-success');
+        document.getElementById("MyElement").classList.remove('btn-danger');
+	    
+        
+        
+        
+	}
+    
+	function ns(){
+        x.style.left="0px";
+		y.style.left="100%";
+		z.style.left="0";
+        document.getElementById('submit').style.color="black";
+        document.getElementById('notsubmit').style.color="white";
+        document.getElementById('btntoggle').style.backgroundColor="#d9534f";
+        document.getElementById("MyElement").classList.remove('btn-success');
+        document.getElementById("MyElement").classList.add('btn-danger');
+    }
+	</script>
 <script>
  $(document).on('click', '.abc input',function (e) {
 
