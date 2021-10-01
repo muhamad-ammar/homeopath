@@ -99,11 +99,9 @@ left: 0px;
         <div style="margin-bottom: 23px">
     <!--1st child div -->
     <div class="button_box">
-<<<<<<< Updated upstream
-        <div id="btn" class="btn" id="btntoggle"></div>
-=======
+
         <div id="btn" class="btn btn-danger"></div>
->>>>>>> Stashed changes
+
         <button type="button" id=notsubmit class="toggle" onclick="ns()" style="float: left;">Not Submitted</button>
         
         <button type="button" id=submit class="toggle" onclick="s()" style="padding: 10px 10px 10px 30px; float: left;">Submitted</button>
@@ -274,11 +272,8 @@ left: 0px;
 	var y=document.getElementById('reg');
 	var z=document.getElementById('btn');
     document.getElementById('notsubmit').style.color="white";
-<<<<<<< Updated upstream
-    document.getElementById("MyElement").classList.add('btn-danger');
-=======
     z.classList.add('btn-danger');
->>>>>>> Stashed changes
+
     
 		
 	function s(){
@@ -287,17 +282,9 @@ left: 0px;
 		z.style.left="180px";
         document.getElementById('notsubmit').style.color="black";
         document.getElementById('submit').style.color="white";
-<<<<<<< Updated upstream
-        document.getElementById("MyElement").classList.add('btn-success');
-        document.getElementById("MyElement").classList.remove('btn-danger');
-	    
-        
-        
-        
-=======
         z.classList.add('btn-success');
         z.classList.remove('btn-danger');
->>>>>>> Stashed changes
+
 	}
     
 	function ns(){
@@ -305,16 +292,10 @@ left: 0px;
 		y.style.left="100%";
 		z.style.left="0";
         document.getElementById('submit').style.color="black";
-        document.getElementById('notsubmit').style.color="white";
-<<<<<<< Updated upstream
-        document.getElementById('btntoggle').style.backgroundColor="#d9534f";
-        document.getElementById("MyElement").classList.remove('btn-success');
-        document.getElementById("MyElement").classList.add('btn-danger');
-=======
-        
+        document.getElementById('notsubmit').style.color="white";        
         z.classList.remove('btn-success');
         z.classList.add('btn-danger');
->>>>>>> Stashed changes
+
     }
 	</script>
 <script>
