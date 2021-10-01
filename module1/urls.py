@@ -13,6 +13,7 @@ urlpatterns = [
     # path("logout/", LogoutView.as_view(), name="logout"),
     path('register/', register_view,name="register"),
     path('', Home_View,name="home"),
+    path('home', Home_View,name="home"),
     path('search_view',search_view,name='search_view'),
     path('search',table_view,name='search'),
     path('repo',repo_view,name='repo'),

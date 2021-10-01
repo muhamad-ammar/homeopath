@@ -53,7 +53,7 @@ def login_view(request):
             # return redirect("/invalid-password")
             request.session['invalid_user'] = 1 # 1 == True
     return render(request, "login.html", {"form": form})
-@login_required
+@login_required(login_url='login/')
 def logout_view(request):
     request.session.flush()
     logout(request)
@@ -62,7 +62,7 @@ def logout_view(request):
 
 def Home_View(request):
     return render(request,"home.html")
-@login_required
+@login_required(login_url='login/')
 def search_view(request):
     sym=[]
     rubric=[]
@@ -239,7 +239,7 @@ def patientFeedbackForm(request):
             result += "<button type='submit' class='btn btn-primary' id='saveFeedback' >SAVE FEEDBACK</button>"
             
     return HttpResponse(result)
-@login_required
+@login_required(login_url='login/')
 def feedback_view(request):
     
     patient=patientData.objects.all()
