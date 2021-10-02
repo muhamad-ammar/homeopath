@@ -217,8 +217,8 @@ def patientFeedbackForm(request):
                     temp.append(y)
             remiesRubrics.append(temp)
         
-        result += "<h5>"+name+" </h5>"
-        result += "<h5>"+date+"</h5>"
+        result += "<h2 align = 'center'>"+name+" </h2>"
+        result += "<h2 align = 'center'>"+date+"</h2>"
         result += "<br><br><br>"
         for x in remiesRubrics:
             z=x.pop(0)
