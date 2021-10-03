@@ -217,13 +217,13 @@ def patientFeedbackForm(request):
                     temp.append(y)
             remiesRubrics.append(temp)
         
-        result += "<h2 align = 'center'>"+name+" </h2>"
-        result += "<h2 align = 'center'>"+date+"</h2>"
+        result += "<h3 align = 'center'>Patient Name : "+name+" </h3>"
+        result += "<h4 align = 'center'>Date: "+date+"</h4><hr>"
         result += "<br><br><br>"
         for x in remiesRubrics:
             z=x.pop(0)
             zx=z.replace(', ','_')
-            result += "<h3>"+z+"</h3><br>"
+            result += "<h4>"+z+"</h4><br>"
             for y in x:
                 sliderName = zx+'?'+y
                 sliderNameList.append(sliderName.replace('_',', '))
@@ -233,7 +233,7 @@ def patientFeedbackForm(request):
                 else:
                     givenWeight = str(updatedWeights.objects.get(patientID=pid, rubricRemedies=sliderName.replace('_',', ')).weight)
                     result += "<div id="+zx+"><input type='range' min='0' max='5' value='"+givenWeight+"' class='slider' name='"+sliderName+"' disabled> "+givenWeight+" <div><br>"
-            result += "<br><br>"
+            result += "<br><hr><br>"
         
         if patient.feedback == False:
             result += "<button type='submit' class='btn btn-primary' id='saveFeedback' >SAVE FEEDBACK</button>"

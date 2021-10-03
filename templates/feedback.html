@@ -160,18 +160,19 @@ left: 0px;
             </div>
 
         </div>
-        <div style="padding: 50px 0px 50px 0px !important; background-image: linear-gradient(to bottom right, #EB5757, #1d4350);">
-            <div class="row">
-                <div class="container" style = "background-color: #ffefdf; border-radius: 50px 10px;padding: 50px">
-                    
+        
+            <div class="row" style="width:99% !important; margin: auto !important;background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d); padding: 5%;">
+                <div class="container" style = "background-color: #ffffff; border-radius: 50px;">
+                    <div class="container" style="padding: 5%;">
                     <form id="feedform" method="GET" enctype="multipart/form-data" action="{% url 'saveFeedbackForm' %}">
-                
+                        
                         <div id="feedBackDiv"></div>
                     {% comment %} <button type='submit' id=btn class='{{ btn_class }}'>{% if submit_btn %} {{ submit_btn }} {% else %}SAVE FEEDBACK {% endif %}</button> {% endcomment %}
                     </form>
+                    </div>
                 </div>
             </div>
-        </div>    
+           
 
 <!-- <header class="container"  style="width: 100% !important; ">
     <div class="row" >
