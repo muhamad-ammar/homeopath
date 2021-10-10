@@ -78,18 +78,18 @@ WSGI_APPLICATION = 'fypmodule1.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 LOGIN_REDIRECT_URL = 'main/index'
 DATABASES = {
-        # 'default': {
-        #     'ENGINE': 'django.db.backends.postgresql_psycopg2', 
-        #     'NAME': 'd7sbn8f98tqf72',                      
-        #     'USER': 'nahlfitgnepsii',
-        #     'PASSWORD': '451e92cc989e33576f650344c2eeaed12f2b57a2a2befca526d43485089aa987',
-        #     'HOST': 'ec2-52-50-171-4.eu-west-1.compute.amazonaws.com',                      
-        #     'PORT': '5432',                      
-        # }
         'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+            'ENGINE': 'django.db.backends.postgresql_psycopg2', 
+            'NAME': 'd7sbn8f98tqf72',                      
+            'USER': 'nahlfitgnepsii',
+            'PASSWORD': '451e92cc989e33576f650344c2eeaed12f2b57a2a2befca526d43485089aa987',
+            'HOST': 'ec2-52-50-171-4.eu-west-1.compute.amazonaws.com',                      
+            'PORT': '5432',                      
+        }
+    #     'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    # }
     }
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
