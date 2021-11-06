@@ -5,31 +5,42 @@ import requests
 import json
 from django.urls import reverse
 from django.http import JsonResponse,HttpResponse
+import numpy as np
 # Create your views here.
+import time
 from .forms import LoginForm, RegisterForm, searchForm,patientForm,feedbackForm
-from .models import patientData,updatedWeights
+from .models import patientData,updatedWeights,userDocData
 from datetime import datetime
 
 User = get_user_model()
+jsonData=[]
 rubricsWithIds ={}
 sliderNameList = []
+feedSubmited = []
+feedNotSubmited = []
+feedback_filter = False
 
 def register_view(request):
     form = RegisterForm(request.POST or None)
     if form.is_valid():
-        username = form.cleaned_data.get("username")
+        user_name = form.cleaned_data.get("username")
         email = form.cleaned_data.get("email")
         password = form.cleaned_data.get("password1")
         password2 = form.cleaned_data.get("password2")
         try:
             if password==password2:
-                user = User.objects.create_user(username, email, password)
+                user = User.objects.create_user(user_name, email, password)
+                user_doc_data = userDocData()
+                user_doc_data.userCID = user_name+'%'+email
+                usertemp = authenticate(request, username=user_name, password=password)
+                user_doc_data.userDID = usertemp.id
+                user_doc_data.save()
             else:
+                user = None
                 request.session['register_error'] = 1
         except:
             user = None
         if user != None:
-            login(request, user)
             return redirect("/login")
         else:
             request.session['register_error'] = 1 # 1 == True
@@ -64,10 +75,12 @@ def Home_View(request):
     return render(request,"home.html")
 @login_required(login_url='login/')
 def search_view(request):
+    global jsonData
     sym=[]
     rubric=[]
     sym=[]
     rubric=[]
+    jsonData=[]
     pForm=patientForm(request.POST or None)
     if request.method == "POST":
             key_s=request.GET
@@ -75,6 +88,8 @@ def search_view(request):
             response = requests.get(f'https://www.oorep.com/api/lookup?symptom={keyword}&repertory=kent&page=0&remedyString=&minWeight=0&getRemedies=1')
             res=response.text          
             jsondata=json.loads(res)
+            for i in jsondata[0]['results']:
+                jsonData.append(i)
             # print(jsondata[0]['results'][0]['rubric']['fullPath'])
             # sym=jsondata[0]['results'][0]['weightedRemedies']
             # print(jsondata[0]['results'][0]['weightedRemedies'].keys())
@@ -97,7 +112,7 @@ def search_view(request):
                 # print(jsondata[0]['results'][0]['weightedRemedies'][""]['remedy']['nameLong'])
             
                # print("Name =",x,"\n\tRemi =", sub_sym_rem[sub_sym.index(x)])
-    
+    print(jsonData)
     return render(request,'tab_remedy.html',{"pForm": pForm})
 
 def table_view(request):
@@ -111,7 +126,9 @@ def table_view(request):
         response = requests.get(f'https://www.oorep.com/api/lookup?symptom={keyword}&repertory=kent&page=0&remedyString=&minWeight=0&getRemedies=1')
         res=response.text          
         jsondata=json.loads(res)
-        
+        global jsonData
+        for i in jsondata[0]['results']:
+            jsonData.append(i)
         # print(jsondata[0]['results'][0]['rubric']['fullPath'])
         # sym=jsondata[0]['results'][0]['weightedRemedies']
         # print(jsondata[0]['results'][0]['weightedRemedies'].keys())
@@ -138,6 +155,7 @@ def table_view(request):
             result += "<td class= 'col-lg-1'><div class='abc'>"
             result += "<button type = 'submit' value='Add This' id = "+str(x[2])+" class = 'btn btn-success'  >Add This</button></div></td>"
             result += '</tr>'
+        # print(jsonData)
         return HttpResponse(result)
     
 def repo_view(request):
@@ -154,16 +172,33 @@ def submit_view(request):
         
     if request.method == "GET":
         val_s=request.GET['values_text'].split(',')[:-1]
-        
+        # print(val_s)
         dbpatient=patientData()
         pName = val_s.pop(0).split('?')[1]
-        dbpatient.patientID = pName +'%'+ val_s.pop(0).split('?')[1]+'%'+str(datetime.now().strftime("%H:%M:%S"))
+        pAge = val_s.pop(0).split('?')[1]
+        pDate = val_s.pop(0).split('?')[1]
+        pGender = val_s.pop(0).split('?')[1]
+        dbpatient.patientID = pName +'%'+ pDate +'%'+str(datetime.now().strftime("%H:%M:%S"))
+        dbpatient.patientName = pName
+        dbpatient.patientDate = pDate
+        dbpatient.age = pAge
+        dbpatient.gender = pGender
         remies=''
+        if len(pName) == 0:
+            return HttpResponse('No-Name')
+        if len(pAge) == 0:
+            return HttpResponse('No-Age')
+        if len(val_s) == 0:
+            return HttpResponse('No-Rubric')
+        
         for x in val_s:
             x=x.split('?')
             rid = int(x.pop(0))
-            remies+=str(rid)+"|"+rubricsWithIds.get(rid)+':'+x[0][1:].replace('||','|')+'?'
+            while('||' in x):
+                x=x.replace('||','|')
+            remies+=str(rid)+"|"+rubricsWithIds.get(rid)+':'+x[0][1:]+'?'
             
+        dbpatient.userDID = request.user.id
         dbpatient.remedies = remies[:-1]
         dbpatient.save()
         
@@ -181,17 +216,78 @@ def submit_view(request):
        
     return HttpResponse('Success')
 
+def case_analysis(request):
+    rubric_ids=[]
+    rubric_data=[]
+    rem_weights=[]
+    rem_names=[]
+    localRemflag=False
+    htmlStr=''
+    global jsonData
+    if request.method=='GET':
+        key_s=request.GET
+        ids=key_s['inputValue']
+        for i in ids.split(","):
+            rubric_ids.append(i[1:])
+        # print(rubric_ids)
+        # print(jsonData)
+        for i in range(len(rubric_ids)):#no of rubrics added
+            for j in range(len(jsonData)):#no of searches done by the user
+                if str(rubric_ids[i])==str(jsonData[j]['rubric']['id']):
+                    rubric_data.append(jsonData[j])
+                    break
+        for i in rubric_data:
+            for j in i['weightedRemedies']:
+                name=j['remedy']['nameAbbrev']
+                weight=j['weight']
+                if name in rem_names:
+                    ind=rem_names.index(name)
+                    rem_weights[ind]+=weight
+                else:
+                    rem_names.append(name)
+                    rem_weights.append(weight)
+        # print(rem_names,rem_weights)
+        sorted_weights=np.flip(np.argsort(rem_weights))
+        htmlStr+='<thead class="thead-dark"><tr></tr><th>Rubric</th>'
+        for i in range(len(rem_names)):
+            htmlStr+=f'<th style="white-space: nowrap;overflow:hidden;">{rem_names[sorted_weights[i]]}({rem_weights[sorted_weights[i]]})</th>'
+        htmlStr+='</tr></thead><tbody>'
+        for i in range(len(rubric_data)):
+            htmlStr+=f"<tr><td style='white-space: nowrap;overflow:hidden;'>{rubric_data[i]['rubric']['fullPath']}</td>"
+            for j in range(len(rem_names)):
+                localRemflag=False
+                remIndex=sorted_weights[j]
+                remName=rem_names[remIndex]
+                for k in rubric_data[i]['weightedRemedies']:
+                    if remName == k['remedy']['nameAbbrev']:
+                        localRemflag=True
+                        break
+                if localRemflag:
+                    localrowWeight=k['weight']
+                    # print(localrowWeight,remName)
+                    htmlStr+=f'<td>{localrowWeight}</td>'
+                else:
+                    htmlStr+=f'<td></td>'
+                        
+            htmlStr+='</tr></tbody>'
+        f=''
+        return HttpResponse(htmlStr)
+
+
 def saveFeedbackForm(request):
     if request.method == 'GET':
         pid=request.GET
-        print(pid)
+        # print(pid)
         patientID = sliderNameList.pop(0)
+        # print(patientID)
         for x in sliderNameList:
             feedback = updatedWeights()
             feedback.patientID = patientID
             feedback.rubricRemedies = x
-            print(x)
+            feedback.age = patientData.objects.get(patientID=patientID).age
+            feedback.gender = patientData.objects.get(patientID=patientID).gender
             feedback.weight = pid[x.replace(', ','_')]
+            feedback.userDID = request.user.id
             feedback.save()
             
         dbpatient=patientData.objects.get(patientID=patientID)
@@ -207,7 +303,7 @@ def patientFeedbackForm(request):
         pid=request.GET['inputValue']
         sliderNameList = [pid]
         patient = patientData.objects.get(patientID=pid)
-        name,date,time = pid.split('%')
+        name,date,ptime = pid.split('%')
         remiesRubrics = []
         for x in patient.remedies.split('?'):
             x=x.split(':')
@@ -217,8 +313,10 @@ def patientFeedbackForm(request):
                     temp.append(y)
             remiesRubrics.append(temp)
         
-        result += "<h3 align = 'center'>Patient Name : "+name+" </h3>"
-        result += "<h4 align = 'center'>Date: "+date+"</h4><hr>"
+        result += "<h3 align = 'center'>Patient Name     : "+name+" </h3>"
+        result += "<h4 align = 'center'>Date             : "+date+"</h4>"
+        result += "<h4 align = 'center'>Gender           : "+patient.gender+"</h4>"
+        result += "<h4 align = 'center'>Age              : "+patient.age+"</h4><hr>"
         result += "<br><br><br>"
         for x in remiesRubrics:
             z=x.pop(0)
@@ -239,30 +337,104 @@ def patientFeedbackForm(request):
             result += "<button type='submit' class='btn btn-primary' id='saveFeedback' >SAVE FEEDBACK</button>"
             
     return HttpResponse(result)
-@login_required(login_url='login/')
-def feedback_view(request):
-    
-    patient=patientData.objects.all()
-    result=[]
-    
+
+
+def feedback_filter_view(request):
+    global feedback_filter
+    global feedSubmited
+    global feedNotSubmited
     feedSubmited = []
     feedNotSubmited = []
-    for dat in patient:
-        patientarr=[]
-        pid=dat.patientID
-        flag=dat.feedback
-        patient_name,date,time=pid.split('%')
-        patientarr.append(patient_name)
-        patientarr.append(date)
-        patientarr.append(flag)
-        patientarr.append(pid)
-        patientarr.append(formateTime(time))
-        print(dat.feedback," ",type(dat.feedback))
-        if dat.feedback == False:
-            feedNotSubmited.append(patientarr)
-        if dat.feedback == True:
-            feedSubmited.append(patientarr)
+    feedback_filter = True
+    if request.method == 'GET':
+        
+        inputData=[]
+        patient=patientData.objects.all()
+        for x in request.GET['inputValue'].split(','):
+            inputData.append(x.split('?')[1])
             
+        if inputData[0] == '' and inputData[1] == '' and inputData[2] == '':
+            patient=patientData.objects.filter(userDID = str(request.user.id))
+        elif inputData[0] == '' and inputData[1] != '' and inputData[2] != '':
+            patient=patientData.objects.filter(userDID = str(request.user.id), age = inputData[1], patientDate = inputData[2])
+        elif inputData[0] != '' and inputData[1] == '' and inputData[2] != '':
+            patient=patientData.objects.filter(userDID = str(request.user.id), patientName = inputData[0], patientDate = inputData[2])
+        elif inputData[0] != '' and inputData[1] != '' and inputData[2] == '':
+            patient=patientData.objects.filter(userDID = str(request.user.id), patientName = inputData[0], age = inputData[1])
+        elif inputData[0] != '' and inputData[1] != '' and inputData[2] != '':
+            patient=patientData.objects.filter(userDID = str(request.user.id), patientName = inputData[0], age = inputData[1], patientDate = inputData[2])
+        elif inputData[0] == '' and inputData[1] == '' and inputData[2] != '':
+            patient=patientData.objects.filter(userDID = str(request.user.id), patientDate = inputData[2])
+        elif inputData[0] == '' and inputData[1] != '' and inputData[2] == '':
+            patient=patientData.objects.filter(userDID = str(request.user.id), age = inputData[1])
+        elif inputData[0] != '' and inputData[1] == '' and inputData[2] == '':
+            patient=patientData.objects.filter(userDID = str(request.user.id), patientName = inputData[0])
+        
+        # print(str(request.user.id))
+        
+        for dat in patient:
+            patientarr=[]
+            pid=dat.patientID
+            page=dat.age
+            flag=dat.feedback
+            patient_name,date,ptime=pid.split('%')
+            patientarr.append(patient_name)
+            patientarr.append(date)
+            patientarr.append(flag)
+            patientarr.append(pid)
+            patientarr.append(formateTime(ptime))
+            patientarr.append(page)
+            if dat.feedback == False:
+                feedNotSubmited.append(patientarr)
+            if dat.feedback == True:
+                feedSubmited.append(patientarr)
+        
+    # print("pleas4",feedNotSubmited)
+    return render(request,'feedback.html',{"feedSubmited":feedSubmited,"feedNotSubmited":feedNotSubmited})
+
+
+@login_required(login_url='login/')
+def feedback_view(request):
+    global feedSubmited
+    global feedNotSubmited
+    global feedback_filter
+
+    # print(str(request.user.id))
+    # patient=patientData.objects.all()
+    # global time
+    time.sleep(1)
+    patient=patientData.objects.filter(userDID = str(request.user.id))
+    # print('some       ',feedback_filter,'hm')
+    # print(feedNotSubmited)
+    
+    if feedback_filter == False:
+        feedSubmited = []
+        feedNotSubmited = []
+        for dat in patient:
+            # print(str(request.user.id) == dat.userDID)
+            # print(dat.userDID)
+            patientarr=[]
+            pid=dat.patientID
+            flag=dat.feedback
+            page=dat.age
+            patient_name,date,ptime=pid.split('%')
+            patientarr.append(patient_name)
+            patientarr.append(date)
+            patientarr.append(flag)
+            patientarr.append(pid)
+            patientarr.append(formateTime(ptime))
+            patientarr.append(page)
+            # print(dat.feedback," ",type(dat.feedback))
+            if dat.feedback == False:
+                feedNotSubmited.append(patientarr)
+            if dat.feedback == True:
+                feedSubmited.append(patientarr)
+    else:
+        feedback_filter = False
+        
+    # print('some   ok    ',feedback_filter,'hm')
+    # print(feedNotSubmited)
+    # print(feedSubmited)
     return render(request,'feedback.html',{"feedSubmited":feedSubmited,"feedNotSubmited":feedNotSubmited})
 
 
@@ -273,16 +445,16 @@ def printAllDB():
         print(x.patientID)
         print(x.remedies)
         
-def formateTime(time):
-    time = time[:5]
-    if int(time[:2]) > 11:
-        h = str(int(time[:2])-12)
+def formateTime(ptime):
+    ptime = ptime[:5]
+    if int(ptime[:2]) > 11:
+        h = str(int(ptime[:2])-12)
         if h == '0':
             h = '12'
         if len(h) == 1:
             h = '0' + h
-        time = h+time[2:]+" PM"
+        ptime = h+ptime[2:]+" PM"
     else:
-        time += " AM"
+        ptime += " AM"
         
-    return time
+    return ptime

@@ -44,6 +44,15 @@
     overflow-y: scroll;
     border: 1px solid lightgrey;
 }
+.filter_form
+{
+	width:85%;
+	height: 10vh;
+    position:relative;
+	margin:auto;
+	background:#fff;
+	padding: 5px;
+}
 .button_box
 {
 	width: 350px;
@@ -86,7 +95,7 @@ left: 0px;
 </style>
 <script src="https://use.fontawesome.com/4672b084a3.js"></script>
 <header class="masthead text-white text-center" style="background: url('https://res.cloudinary.com/ammar992/image/upload/v1630906356/Untitled_design_6_ahdwfm.png') no-repeat center center; background-size:cover;" >
-    <div class="container" style="padding: 10% 5% 10% 5% !important;">
+    <div class="container" style="padding: 5% 5% 5% 5% !important;">
         <div class="row">
             <div class="col-xl-9 mx-auto">
                 <h1 class="mb-5">Ailments are treated by minute doses of natural substances that in larger amounts</h1>
@@ -95,9 +104,11 @@ left: 0px;
         </div>
     </div>
 </header>
+    
     <!--Main div -->
-        <div style="margin-bottom: 23px">
+    <div style="margin-bottom: 23px">
     <!--1st child div -->
+
     <div class="button_box">
 
         <div id="btn" class="btn btn-danger"></div>
@@ -107,6 +118,23 @@ left: 0px;
         <button type="button" id=submit class="toggle" onclick="s()" style="padding: 10px 10px 10px 30px; float: left;">Submitted</button>
         <div style="clear: both;"></div>
     </div>
+    <div class="filter_form">
+        <div class="inputs">
+            <form id="patientFilter">
+                <table>
+                    <tr>
+                        <td><input type ='text' name="pnameFilter" id="pnameFilter" placeholder="Name"></input></td>
+                        <td><input type ='text' name="pageFilter" id="pageFilter" placeholder="Age"></input></td>
+                        <td><input type ='date' name='date' id="pdateFilter"></input></td>
+                        <td>
+                            <button class='btn btn-danger' style="margin-top:20px;" type="submit" >{% if submit_btn %} {{ submit_btn }} {% else %}Filter{% endif %}</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+    <br>
     <div class="log_form">
                 <div class="inputs" id="login">
                     <table class="table table-bordered table-hover" id="table1">
@@ -114,16 +142,18 @@ left: 0px;
                             <tr>
                                 <th id="trs-hd" class="col-lg-2">Patient Name</th>
                                 <th id="trs-hd" class="col-lg-2">Date</th>
-                                <th id="trs-hd" class="col-lg-2">time</th>
+                                <th id="trs-hd" class="col-lg-2">Time</th>
+                                <th id="trs-hd" class="col-lg-2">Age</th>
                                 <th id="trs-hd" class="col-lg-1">Feedback</th>
                             </tr>
                         </thead>
                         <tbody id='tbody1'>
                         {% for x in feedNotSubmited %} 
-                            <tr>                            
+                            <tr>
                                 <td >{{x.0}}</td>
                                 <td >{{x.1}}</td>
                                 <td >{{x.4}}</td>
+                                <td >{{x.5}}</td>
                                 <td id='useless'>                            
                                     <div class="abc"><input type='submit' class='btn btn-danger'  id='{{x.3}}' value='Add feedback' name='Hello'></div>
                                 </td>
@@ -138,16 +168,18 @@ left: 0px;
                             <tr>
                                 <th id="trs-hd" class="col-lg-2">Patient Name</th>
                                 <th id="trs-hd" class="col-lg-2">Date</th>
-                                <th id="trs-hd" class="col-lg-2">time</th>
+                                <th id="trs-hd" class="col-lg-2">Time</th>
+                                <th id="trs-hd" class="col-lg-2">Age</th>
                                 <th id="trs-hd" class="col-lg-1">Feedback</th>
                             </tr>
                         </thead>
-                        <tbody id='tbody1'>
+                        <tbody id='tbody2'>
                         {% for x in feedSubmited %} 
                             <tr>                            
                                 <td >{{x.0}}</td>
                                 <td >{{x.1}}</td>
                                 <td >{{x.4}}</td>
+                                <td >{{x.5}}</td>
                                 <td id='useless'>                            
                                     <div class="abc"><input type='submit' class='btn btn-success'  value='Submitted' id='{{x.3}}' ></div>
                                 </td>
@@ -358,5 +390,36 @@ $.ajax({
 
         });
         {% endcomment %}
+</script>
+<script>
+
+$('#patientFilter').submit(function() {
+    // get all the inputs into an array.
+    var $inputs = $('#patientFilter :input');
+    // not sure if you wanted this, but I thought I'd add it.
+    // get an associative array of just the values.
+    var values = [];
+    $inputs.each(function() {
+        name=this.name;
+        value=$(this).val();
+        vals=name+'?'+value;
+        values.push(vals);
+    });
+    
+    values_text=values.toString();
+
+    $.ajax({
+        type:'GET',
+        url:"{% url 'feedback_filter_view' %}",
+        data: {
+            'inputValue': values_text,
+            
+            
+        },
+        success: function (data) {
+            console.log('success');
+        }
+    });
+});
 </script>
 {% endblock content %}

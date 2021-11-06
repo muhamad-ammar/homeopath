@@ -4,7 +4,7 @@ from django.urls import path,re_path
 
 from django.contrib.auth.views import LogoutView
 from django.conf.urls import url
-from .views import feedback_view, login_view, logout_view,Home_View, register_view,search_view,table_view,submit_view,repo_view,saveFeedbackForm,patientFeedbackForm
+from .views import feedback_view, login_view, logout_view,Home_View, register_view,search_view,table_view,submit_view,repo_view,saveFeedbackForm,patientFeedbackForm,feedback_filter_view,case_analysis
 
 urlpatterns = [
 
@@ -19,6 +19,8 @@ urlpatterns = [
     path('repo',repo_view,name='repo'),
     path('submit_view',submit_view,name='submit_view'),
     path('feedback',feedback_view,name='feedback_view'),
+    path('feedback_filter_view',feedback_filter_view,name='feedback_filter_view'),
+    path('case_analysis',case_analysis,name='case_analysis'),
     path('saveFeedbackForm',saveFeedbackForm,name='saveFeedbackForm'),
     path('patientFeedbackForm',patientFeedbackForm,name='patientFeedbackForm'),
 

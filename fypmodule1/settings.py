@@ -86,10 +86,10 @@ DATABASES = {
             'HOST': 'ec2-52-50-171-4.eu-west-1.compute.amazonaws.com',                      
             'PORT': '5432',                      
         }
-    #     'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    # }
+        # 'default': {
+        #     'ENGINE': 'django.db.backends.sqlite3',
+        #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        # }
     }
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
