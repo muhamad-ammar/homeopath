@@ -351,7 +351,7 @@
         // var colname=col1.replace(", ","_");
         // var col= colname.replace(",","-");
         var div1 = "<tr id=t" + me + " class='ridentifier'><td class = 'col-lg-6'>" + col1 + "</td>";
-        var div2 = "<td class = 'col-lg-5'><div><div style='float: left; width: 78% !important;'><input type ='text' style='width:90%' class='search-store' name=" + me + " id=s" + me + "><p style='border:1px solid grey' contentEditable='true' id=i" + me + " onkeyup='myFunction(" + me + ")'></p></div><div style='float: right; width: 18% !important'><div id=" + me + " style='border: 1px solid;' class='btn btn-success' onclick='store(this.id)'>+</div><div id=" + me + " style='border: 1px solid;' class='btn btn-danger' onclick='delstore(this.id)'>-</div></div><div style='clear:both'></div></div><div  id=d" + me + "></div></td></tr>";
+        var div2 = "<td class = 'col-lg-5'><div><div style='float: left; width: 78% !important;'><input type ='text' style='width:90%' class='search-store' name=" + me + " id=s" + me + "><p style='border:1px solid grey' contentEditable='true' id=i" + me + " onkeyup='myFunction(" + me + ")'></p></div><div style='float: right; width: 18% !important'><div id=" + me + " style='border: 1px solid; width: 34px; !important;' class='btn btn-success' onclick='store(this.id)'>+</div><div id=" + me + " style='border: 1px solid; width: 34px; !important;' class='btn btn-danger' onclick='delstore(this.id)'>-</div></div><div style='clear:both'></div></div><div  id=d" + me + "></div></td></tr>";
 
         result = div1 + div2;
         $(".patient-form").append(result);
@@ -413,10 +413,7 @@
         var $input = $(".patient-form tr").map(function() {
             return $(this).attr("id");
         }).get();
-        console.log(typeof($input));
-        console.log($input);
         const str = $input.toString();
-        console.log(str)
         e.preventDefault();
 
         $.ajax({
@@ -468,8 +465,8 @@
         });
         if (input === '') {
             suggestionsPanel.innerHTML = '';
-        } { % comment %
-        }
+        } 
+        {% comment %} 
         searchInput.addEventListener('keyup', function() {
             const input = searchInput.value;
             console.log(input);
@@ -487,19 +484,16 @@
             if (input === '') {
                 suggestionsPanel.innerHTML = '';
             }
-        }) { % endcomment %
-        }
+        }) {% endcomment %}
 
     }
 </script>
 <script>
-    { % comment %
-    }
+{% comment %}     
     console.log(document.getElementsByClassName("autocomplete-items-class"))
     document.getElementsByClassName("autocomplete-items-class").onclick = function() {
         myAutoFunction()
-    }; { % endcomment %
-    }
+    }; {% endcomment %}
 
     function myAutoFunction(textOfdiv, pTagID) {
         document.getElementById("i" + pTagID).innerHTML = textOfdiv;
@@ -507,8 +501,7 @@
     }
 </script>
 <script>
-    { % comment %
-    }
+    {% comment %}
 
     function autocomplete(inp, arr) {
         /*the autocomplete function takes two arguments,
@@ -610,11 +603,9 @@
         document.addEventListener("click", function(e) {
             closeAllLists(e.target);
         });
-    } { % endcomment %
-    } { % comment %
     }
-    autocomplete($('.search-input'), remiesList); { % endcomment %
-    }
+    autocomplete($('.search-input'), remiesList);
+     {% endcomment %}
 
     function store(id) {
         var current = $('#i' + id).text();
@@ -666,12 +657,6 @@
             success: function(data) {
                 if (data == 'Success')
                     alert("Data Saved Successfuly");
-                else if (data == 'No-Rubric')
-                    alert("No Rubric Added");
-                else if (data == 'No-Name')
-                    alert("No Name Added");
-                else if (data == 'No-Age')
-                    alert("No Age Added");
             }
         });
 
