@@ -175,31 +175,36 @@ def submit_view(request):
         # print(val_s)
         dbpatient=patientData()
         pName = val_s.pop(0).split('?')[1]
+        pName = pName if pName != "" else "NA"
         pAge = val_s.pop(0).split('?')[1]
         pDate = val_s.pop(0).split('?')[1]
         pGender = val_s.pop(0).split('?')[1]
         dbpatient.patientID = pName +'%'+ pDate +'%'+str(datetime.now().strftime("%H:%M:%S"))
         dbpatient.patientName = pName
         dbpatient.patientDate = pDate
-        dbpatient.age = pAge
+        dbpatient.age = pAge if pAge != "" else "NA"
         dbpatient.gender = pGender
-        remies=''
-        if len(pName) == 0:
-            return HttpResponse('No-Name')
-        if len(pAge) == 0:
-            return HttpResponse('No-Age')
-        if len(val_s) == 0:
-            return HttpResponse('No-Rubric')
-        
+        result=''
+        ridRem=[]
+        gRem =''
         for x in val_s:
             x=x.split('?')
             rid = int(x.pop(0))
             while('||' in x):
                 x=x.replace('||','|')
-            remies+=str(rid)+"|"+rubricsWithIds.get(rid)+':'+x[0][1:]+'?'
+            rem = x[0][1:]
+            ridRem.append([rid,rem])
+            if rem != '':
+                gRem = rem
+        print(ridRem)
+        for x,y in ridRem:
+            if y != '':
+                result+=str(x)+"|"+rubricsWithIds.get(x)+':'+y+'?'
+            else:
+                result+=str(x)+"|"+rubricsWithIds.get(x)+':'+gRem+'?'
             
         dbpatient.userDID = request.user.id
-        dbpatient.remedies = remies[:-1]
+        dbpatient.remedies = result[:-1]
         dbpatient.save()
         
         
