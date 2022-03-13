@@ -64,7 +64,7 @@ def login_view(request):
             # return redirect("/invalid-password")
             request.session['invalid_user'] = 1 # 1 == True
     return render(request, "login.html", {"form": form})
-    
+
 @login_required(login_url='login/')
 def logout_view(request):
     request.session.flush()

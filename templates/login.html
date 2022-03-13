@@ -30,15 +30,12 @@
                     <h3 align="center">Login</h3>
                     <hr>
                     {{ form.as_p }}
-                    <p>
-                      Show Password
-                      <i class="bi bi-eye-slash" style="cursor: pointer;float:right;margin-left:-10px" id="togglePassword"></i>
-                    </p>
-                
+                    <i class="bi bi-eye-slash" id="togglePassword"></i>
+                    Show Password
                     <button type='submit' class='{{ btn_class }} btn btn-dark btn-lg btn-block'>{% if submit_btn %} {{ submit_btn }} {% else %}Submit {% endif %}</button>
                     <p class="mb-5 pb-lg-2" style="color: #393f81;"><a href="{% url 'register'%}" style="color: #393f81;">Not have account? Register here</a></p>
                   </form>
-  
+
                 </div>
               </div>
             </div>
@@ -50,6 +47,7 @@
   <script>
     const togglePassword = document.querySelector("#togglePassword");
     const password = document.querySelector("#user-password");
+
     togglePassword.addEventListener("click", function () {
         // toggle the type attribute
         const type = password.getAttribute("type") === "password" ? "text" : "password";
@@ -57,11 +55,6 @@
         
         // toggle the icon
         this.classList.toggle("bi-eye");
-    });
-    // prevent form submit
-    const form = document.querySelector("form");
-    form.addEventListener('submit', function (e) {
-        e.preventDefault();
     });
   </script>
   

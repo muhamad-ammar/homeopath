@@ -1,3 +1,4 @@
+from ast import Pass
 from django import forms
 from django.contrib.auth import get_user_model
 from bootstrap_datepicker_plus import DatePickerInput
@@ -69,7 +70,8 @@ class LoginForm(forms.Form):
         widget=forms.PasswordInput(
             attrs={
                 "class": "form-control",
-                "id": "user-password"
+                "id": "user-password",
+                # "onclick":"togglePasswordFun()"
             }
         )
     )
@@ -77,9 +79,9 @@ class LoginForm(forms.Form):
         username = self.cleaned_data.get("username")
         qs = User.objects.filter(username__iexact=username) # thisIsMyUsername == thisismyusername
         if not qs.exists():
-            raise forms.ValidationError("This is an invalid user.")
+            raise forms.ValidationError("Invalid username or password.")
         if qs.count() != 1:
-            raise forms.ValidationError("This is an invalid user.")
+            raise forms.ValidationError("Invalid username or password.")
         return username
 class patientForm(forms.Form):
     symptom=forms.CharField(
