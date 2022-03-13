@@ -11,6 +11,8 @@ import time
 from .forms import LoginForm, RegisterForm, searchForm,patientForm,feedbackForm
 from .models import patientData,updatedWeights,userDocData
 from datetime import datetime
+from serpapi import GoogleSearch
+
 
 User = get_user_model()
 jsonData=[]
@@ -132,8 +134,24 @@ def table_view(request):
         key_s=request.GET
         keyword=key_s['inputValue']
         response = requests.get(f'https://www.oorep.com/api/lookup?symptom={keyword}&repertory=kent&page=0&remedyString=&minWeight=0&getRemedies=1')
+        print("table_view:",response.status_code)
         if response.status_code == 204:
-            return HttpResponse("noResults")
+            params = {
+                "q": keyword,
+                "hl": "en",
+                "gl": "us",
+                "api_key": "6ca9b34d75c4e6827b58b4f9cd7669ec869a05b6588d6140de660bf88f32fa2a"
+            }
+
+            search = GoogleSearch(params)
+            results = search.get_dict()
+            result = "noResults"
+            print(results["search_information"])
+            if "spelling_fix" in results["search_information"].keys():
+                result += "-"+ results["search_information"]["spelling_fix"]
+
+            return HttpResponse(result)
+        print("sadas",response)
         res=response.text          
         jsondata=json.loads(res)
         global jsonData
@@ -206,7 +224,7 @@ def submit_view(request):
             ridRem.append([rid,rem])
             if rem != '':
                 gRem = rem
-        print(ridRem)
+
         for x,y in ridRem:
             if y != '':
                 result+=str(x)+"|"+rubricsWithIds.get(x)+':'+y+'?'
