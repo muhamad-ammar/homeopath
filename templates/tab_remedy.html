@@ -282,6 +282,8 @@
                 <div style="clear: both;"></div>
 
             </form>
+            <div style="padding: 10px 0 0 20px;margin-bottom:-10px;" id="noResult"></div>
+            <div style="padding: 10px 0 0 20px;margin-bottom:-10px;" id="googleResult"></div>
         </div>
         <br>
         <div class="table-responsive table-bordered table table-hover table-bordered results">
@@ -391,6 +393,9 @@
     $(document).on('submit', '#form', function(e) {
 
         var input = $('#keyword').val();
+        document.getElementById("noResult").innerHTML = "";
+        document.getElementById("googleResult").innerHTML = "";
+
 
         e.preventDefault();
 
@@ -403,8 +408,11 @@
 
             },
             success: function(data) {
-                if (data == "noResults"){
-                    alert("No Results Found");
+                if (data.substring(0, 9) == "noResults"){
+                    document.getElementById("noResult").innerHTML = "No results found";
+                    if (data.length > 9){
+                        document.getElementById("googleResult").innerHTML = "Suggetion By google: " + data.substring(10,data.length);
+                    }
                 }
                 else{
                     $("#tbody1").html(data);
