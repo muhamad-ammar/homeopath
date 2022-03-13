@@ -403,7 +403,12 @@
 
             },
             success: function(data) {
-                $("#tbody1").html(data);
+                if (data == "noResults"){
+                    alert("No Results Found");
+                }
+                else{
+                    $("#tbody1").html(data);
+                }
             }
         });
 

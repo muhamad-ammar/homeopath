@@ -74,6 +74,7 @@ def logout_view(request):
 
 def Home_View(request):
     return render(request,"home.html")
+
 @login_required(login_url='login/')
 def search_view(request):
     global jsonData
@@ -87,6 +88,9 @@ def search_view(request):
             key_s=request.GET
             keyword=key_s['inputValue']
             response = requests.get(f'https://www.oorep.com/api/lookup?symptom={keyword}&repertory=kent&page=0&remedyString=&minWeight=0&getRemedies=1')
+            if response.status_code == 204:
+                return HttpResponse("noResults")
+            
             res=response.text          
             jsondata=json.loads(res)
             for i in jsondata[0]['results']:
@@ -125,6 +129,8 @@ def table_view(request):
         key_s=request.GET
         keyword=key_s['inputValue']
         response = requests.get(f'https://www.oorep.com/api/lookup?symptom={keyword}&repertory=kent&page=0&remedyString=&minWeight=0&getRemedies=1')
+        if response.status_code == 204:
+            return HttpResponse("noResults")
         res=response.text          
         jsondata=json.loads(res)
         global jsonData
