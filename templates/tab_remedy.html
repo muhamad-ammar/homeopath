@@ -151,7 +151,7 @@
 <div class="left-sec">
     <div class="container">
         <br>
-        <form id="patientFormInHeader">
+        <form id="patientForm">
             <table class="" id="table2">
                 <tr>
                     <td class="col-sm-6 col-md-6 col-lg-2" style="!important color:white text-align:left">
@@ -192,7 +192,7 @@
                     </td>
                 </tr>
             </table>
-        </form>
+        
         <br>
 
         <div><button type="button" id='mymodal' class="btn btn-success btn-md" data-toggle="modal" data-target="#myModal">Case</button></div>
@@ -222,9 +222,9 @@
             </div>
         </div>
         <div class="container">
-            <div class="col-md-12 search-table-col" style="!important; margin-top:20px;">
+            <div class="col-md-12 search-table-col" style=" margin-top:20px !important;;">
                 <div class="table-responsive d table table-hover  results">
-                    <form id="patientform">
+                
                         <table class="table table-bordered table-hover" id="table2">
                             <thead class="bill-header cs">
                                 <tr>
@@ -628,28 +628,27 @@
         return $("#s" + id).val("")
     }
 
-    $('#patientform').submit(function() {
+    $('#patientForm').submit(function() {
         // get all the inputs into an array.
-        var $inputs = $('#patientform :input');
-        var $inputsInHeader = $('#patientFormInHeader :input');
+        var $inputs = $('#patientForm :input');
+       
         // not sure if you wanted this, but I thought I'd add it.
         // get an associative array of just the values.
-
+       
         var values = [];
-        $inputsInHeader.each(function() {
-            name = this.name;
-            value = $(this).val();
-            vals = name + '?' + value;
-            values.push(vals);
-        });
         $inputs.each(function() {
             name = this.name;
             value = $(this).val();
             vals = name + '?' + value;
+            console.log(vals);
             values.push(vals);
+            alert(values);
         });
-
+               
         values_text = values.toString();
+        console.log(values_text);
+        alert("asdsd");
+
         //     $(document).on('submit', '#form',function (e) {
         // var input = $('#keyword').val();
         // e.preventDefault();
