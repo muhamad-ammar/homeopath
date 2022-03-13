@@ -51,6 +51,7 @@ def register_view(request):
 
 def login_view(request):
     form = LoginForm(request.POST or None)
+    error=""
     if form.is_valid():
         username = form.cleaned_data.get("username")
         password = form.cleaned_data.get("password")
@@ -61,10 +62,12 @@ def login_view(request):
             login(request, user)
             return redirect("../home")
         else:
+            error="Username or Passwor not Correct"
             # attempt = request.session.get("attempt") or 0
             # request.session['attempt'] = attempt + 1
             # return redirect("/invalid-password")
             request.session['invalid_user'] = 1 # 1 == True
+
     return render(request, "login.html", {"form": form})
 
 @login_required(login_url='login/')
