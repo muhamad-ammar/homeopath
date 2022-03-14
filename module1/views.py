@@ -96,19 +96,23 @@ def table_view(request):
         response = requests.get(f'https://www.oorep.com/api/lookup?symptom={keyword}&repertory=kent&page=0&remedyString=&minWeight=0&getRemedies=1')
         print("table_view:",response.status_code)
         if response.status_code == 204:
-            params = {
-                "q": keyword,
-                "hl": "en",
-                "gl": "us",
-                "api_key": "6ca9b34d75c4e6827b58b4f9cd7669ec869a05b6588d6140de660bf88f32fa2a"
-            }
-
-            search = GoogleSearch(params)
-            results = search.get_dict()
             result = "noResults"
-            print(results["search_information"])
-            if "spelling_fix" in results["search_information"].keys():
-                result += "-"+ results["search_information"]["spelling_fix"]
+            try:
+                params = {
+                    "q": keyword,
+                    "hl": "en",
+                    "gl": "us",
+                    "api_key": "6ca9b34d75c4e6827b58b4f9cd7669ec869a05b6588d6140de660bf88f32fa2a"
+                }
+
+                search = GoogleSearch(params)
+                results = search.get_dict()
+                print(results["search_information"])
+                if "spelling_fix" in results["search_information"].keys():
+                    result += "-"+ results["search_information"]["spelling_fix"]
+
+            except:
+                pass
 
             return HttpResponse(result)
         print("sadas",response)
@@ -179,6 +183,7 @@ def submit_view(request):
         ridRem=[]
         gRem =''
         for x in val_s:
+            print(x)
             if x=="?":
                 continue
             x=x.split('?')
