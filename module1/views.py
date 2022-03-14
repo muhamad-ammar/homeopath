@@ -107,7 +107,7 @@ def table_view(request):
 
                 search = GoogleSearch(params)
                 results = search.get_dict()
-                print(results["search_information"])
+                # print(results["search_information"])
                 if "spelling_fix" in results["search_information"].keys():
                     result += "-"+ results["search_information"]["spelling_fix"]
 
@@ -115,7 +115,7 @@ def table_view(request):
                 pass
 
             return HttpResponse(result)
-        print("sadas",response)
+
         res=response.text          
         jsondata=json.loads(res)
         global jsonData
@@ -163,12 +163,12 @@ def submit_view(request):
     global rubricsWithIds
         
     if request.method == "GET":
-        print("\n\n\n\n\nHelllllllllllllllllllllllllo\n\n\n\n\n")
+        # print("\n\n\n\n\nHelllllllllllllllllllllllllo\n\n\n\n\n")
         val_s=request.GET['values_text'].split(',')
-        print(f"VALS:{val_s}")
+        # print(f"VALS:{val_s}")
         # print(val_s)
         dbpatient=patientData()
-        print(dbpatient)
+        # print(dbpatient)
         pName = val_s.pop(0).split('?')[1]
         pName = pName if pName != "" else "NA"
         pAge = val_s.pop(0).split('?')[1]
@@ -183,7 +183,7 @@ def submit_view(request):
         ridRem=[]
         gRem =''
         for x in val_s:
-            print(x)
+            # print(x)
             if x=="?":
                 continue
             x=x.split('?')
@@ -200,12 +200,12 @@ def submit_view(request):
                 result+=str(x)+"|"+rubricsWithIds.get(x)+':'+y+'?'
             else:
                 result+=str(x)+"|"+rubricsWithIds.get(x)+':'+gRem+'?'
-        print(f"RESUT:{result}")
+        # print(f"RESUT:{result}")
      
         dbpatient.userDID = request.user.id
         dbpatient.remedies = result[:-1]
         dbpatient.save()
-        print("Data Saved Successfully")
+        # print("Data Saved Successfully")
         
         
         # printAllDB()
