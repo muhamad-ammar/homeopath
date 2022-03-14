@@ -113,9 +113,9 @@ left: 0px;
 
         <div id="btn" class="btn btn-danger"></div>
 
-        <button type="button" id=notsubmit class="toggle" onclick="ns()" style="float: left;">Not Submitted</button>
+        <button type="button" id="notsubmit" class="toggle" onclick="ns()" style="float: left;">Not Submitted</button>
         
-        <button type="button" id=submit class="toggle" onclick="s()" style="padding: 10px 10px 10px 30px; float: left;">Submitted</button>
+        <button type="button" id="submit" class="toggle" onclick="s()" style="padding: 10px 10px 10px 30px; float: left;">Submitted</button>
         <div style="clear: both;"></div>
     </div>
     <div class="filter_form">
@@ -123,18 +123,21 @@ left: 0px;
             <form id="patientFilter">
                 <table>
                     <tr>
-                        <td><input type ='text' name="pnameFilter" id="pnameFilter" placeholder="Name"></input></td>
-                        <td><input type ='text' name="pageFilter" id="pageFilter" placeholder="Age"></input></td>
-                        <td><input type ='date' name='date' id="pdateFilter"></input></td>
+                        <td><input type ='text' style="border-radius:25px; margin: 0 5px;" name="pnameFilter" id="pnameFilter" placeholder="Name"></input></td>
+                        <td><input type ='text' style="border-radius:25px; margin: 0 5px;" name="pageFilter" id="pageFilter" placeholder="Age"></input></td>
+                        <td><input type ='date' style="border-radius:25px; margin: 0 5px;" name='date' id="pdateFilter"></input></td>
                         <td>
-                            <button class='btn btn-danger' style="margin-top:20px;" type="submit" >{% if submit_btn %} {{ submit_btn }} {% else %}Filter{% endif %}</button>
+                            <button class='btn btn-danger' style="margin-left: 15px; padding: 2px 12px;" type="submit" >{% if submit_btn %} {{ submit_btn }} {% else %}Filter{% endif %}</button>
                         </td>
                     </tr>
                 </table>
             </form>
         </div>
     </div>
-    <br>
+    <div style="clear:both;">
+    <div id="submittedCount" style="width:100%; text-align: right;float: right;display:none; margin-right: 10%;">Total rows: {{feedSubmitedLength}}</div>
+    <div id="notSubmittedCount" style="width:100%; text-align: right; float: right; margin-right: 10%;">Total rows: {{feedNotSubmitedLength}}</div>
+    <div style="clear:both;">
     <div class="log_form">
                 <div class="inputs" id="login">
                     <table class="table table-bordered table-hover" id="table1">
@@ -304,7 +307,9 @@ left: 0px;
     
 		
 	function s(){
-		x.style.left="-100%";
+		document.getElementById("submittedCount").style.display = "block";
+        document.getElementById("notSubmittedCount").style.display = "none";
+        x.style.left="-100%";
 		y.style.left="0px";
 		z.style.left="180px";
         document.getElementById('notsubmit').style.color="black";
@@ -315,6 +320,8 @@ left: 0px;
 	}
     
 	function ns(){
+        document.getElementById("submittedCount").style.display = "none";
+        document.getElementById("notSubmittedCount").style.display = "block";
         x.style.left="0px";
 		y.style.left="100%";
 		z.style.left="0";
