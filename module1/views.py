@@ -440,7 +440,7 @@ def feedback_view(request):
     # print('some   ok    ',feedback_filter,'hm')
     # print(feedNotSubmited)
     # print(feedSubmited)
-    return render(request,'feedback.html',{"feedSubmited":feedSubmited,"feedNotSubmited":feedNotSubmited})
+    return render(request,'feedback.html',{"feedSubmited":feedSubmited,"feedNotSubmited":feedNotSubmited,"feedSubmitedLength":len(feedSubmited),"feedNotSubmitedLength":len(feedNotSubmited)})
 
 
 def printAllDB():
