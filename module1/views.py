@@ -200,6 +200,7 @@ def submit_view(request):
         dbpatient.userDID = request.user.id
         dbpatient.remedies = result[:-1]
         dbpatient.save()
+        print("Data Saved Successfully")
         
         
         # printAllDB()
