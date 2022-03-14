@@ -160,7 +160,7 @@ def submit_view(request):
         
     if request.method == "GET":
         print("\n\n\n\n\nHelllllllllllllllllllllllllo\n\n\n\n\n")
-        val_s=request.GET['values_text'].split(',')[:-1]
+        val_s=request.GET['values_text'].split(',')
         print(f"VALS:{val_s}")
         # print(val_s)
         dbpatient=patientData()
