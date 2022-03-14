@@ -82,48 +82,8 @@ def Home_View(request):
 
 @login_required(login_url='login/')
 def search_view(request):
-    global jsonData
-    sym=[]
-    rubric=[]
-    sym=[]
-    rubric=[]
-    jsonData=[]
-    pForm=patientForm(request.POST or None)
-    if request.method == "POST":
-            key_s=request.GET
-            keyword=key_s['inputValue']
-            response = requests.get(f'https://www.oorep.com/api/lookup?symptom={keyword}&repertory=kent&page=0&remedyString=&minWeight=0&getRemedies=1')
-            if response.status_code == 204:
-                return HttpResponse("noResults")
-            
-            res=response.text          
-            jsondata=json.loads(res)
-            for i in jsondata[0]['results']:
-                jsonData.append(i)
-            # print(jsondata[0]['results'][0]['rubric']['fullPath'])
-            # sym=jsondata[0]['results'][0]['weightedRemedies']
-            # print(jsondata[0]['results'][0]['weightedRemedies'].keys())
-            symIndex = 0
-            for x in jsondata[0]['results']:
-                sym.append([])
-                rubricName = x["rubric"]["fullPath"]
-                sym[symIndex].append(rubricName)
-                crr_sub_sym_rem = ''
-                for y in x['weightedRemedies']:
-                    crr_sub_sym_rem += ', ' + y["remedy"]["nameAbbrev"]
-                sym[symIndex].append(crr_sub_sym_rem[2:])
-                rubricId = x["rubric"]["id"]
-                sym[symIndex].append(rubricId)
-                symIndex+=1
-                
-                
-    
-                # print(word['remedy']['nameLong'])
-                # print(jsondata[0]['results'][0]['weightedRemedies'][""]['remedy']['nameLong'])
-            
-               # print("Name =",x,"\n\tRemi =", sub_sym_rem[sub_sym.index(x)])
-    print(jsonData)
-    return render(request,'tab_remedy.html',{"pForm": pForm})
+  
+    return render(request,'tab_remedy.html')
 
 def table_view(request):
     sym=[]
@@ -199,9 +159,12 @@ def submit_view(request):
     global rubricsWithIds
         
     if request.method == "GET":
+        print("\n\n\n\n\nHelllllllllllllllllllllllllo\n\n\n\n\n")
         val_s=request.GET['values_text'].split(',')[:-1]
+        print(f"VALS:{val_s}")
         # print(val_s)
         dbpatient=patientData()
+        print(dbpatient)
         pName = val_s.pop(0).split('?')[1]
         pName = pName if pName != "" else "NA"
         pAge = val_s.pop(0).split('?')[1]
@@ -216,6 +179,8 @@ def submit_view(request):
         ridRem=[]
         gRem =''
         for x in val_s:
+            if x=="?":
+                continue
             x=x.split('?')
             rid = int(x.pop(0))
             while('||' in x):
@@ -230,10 +195,12 @@ def submit_view(request):
                 result+=str(x)+"|"+rubricsWithIds.get(x)+':'+y+'?'
             else:
                 result+=str(x)+"|"+rubricsWithIds.get(x)+':'+gRem+'?'
-            
+        print(f"RESUT:{result}")
+     
         dbpatient.userDID = request.user.id
         dbpatient.remedies = result[:-1]
         dbpatient.save()
+        print("Data Saved Successfully")
         
         
         # printAllDB()
