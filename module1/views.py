@@ -93,7 +93,7 @@ def table_view(request):
     if request.method=='GET':
         key_s=request.GET
         keyword=key_s['inputValue']
-        response = requests.get(f'https://www.oorep.com/api/lookup?symptom={keyword}&repertory=kent&page=0&remedyString=&minWeight=0&getRemedies=1')
+        response = requests.get(f'https://www.oorep.com/api/lookup_rep?symptom={keyword}&repertory=kent&page=0&remedyString=&minWeight=0&getRemedies=1')
         print("table_view:",response.status_code)
         if response.status_code == 204:
             result = "noResults"
