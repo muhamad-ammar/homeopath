@@ -9,7 +9,7 @@ import numpy as np
 # Create your views here.
 import time
 from .forms import LoginForm, RegisterForm, searchForm,patientForm,feedbackForm
-from .models import patientData,updatedWeights,userDocData,remidieAndRuubricsRecord
+from .models import patientData,updated_weights,userDocData,remidieAndRuubricsRecord
 from datetime import datetime
 from serpapi import GoogleSearch
 
@@ -284,7 +284,7 @@ def saveFeedbackForm(request):
         patientID = sliderNameList.pop(0)
         # print(patientID)
         for x in sliderNameList:
-            feedback = updatedWeights()
+            feedback = updated_weights()
             feedback.patientID = patientID
             feedback.rubricRemedies = x
             feedback.age = patientData.objects.get(patientID=patientID).age
@@ -307,6 +307,7 @@ def patientFeedbackForm(request):
     global sliderNameList
     if request.method == 'GET':
         pid=request.GET['inputValue']
+        print("PUD ====== ",pid)
         sliderNameList = [pid]
         patient = patientData.objects.get(patientID=pid)
         name,date,ptime = pid.split('%')
@@ -331,13 +332,14 @@ def patientFeedbackForm(request):
             zx=z.replace(', ','_')
             result += "<h4>"+z.split("|")[1]+"</h4><br>"
             for y in x:
-                sliderName = zx+'?'+y
-                sliderNameList.append(sliderName.replace('_',', '))
+                sliderName = (zx+'?'+y).replace('_',', ')
+                sliderNameList.append(sliderName)
                 result += "<p>"+y+"</p>"
                 if patient.feedback == False:
                     result += "<div id="+zx+">0 <input type='range' min='0' max='5' value='3' class='slider' name='"+sliderName+"'> 5 <div><br>"
                 else:
-                    givenWeight = str(updatedWeights.objects.get(patientID=pid, rubricRemedies=sliderName.split("|")[1].replace('_',', ')).weight)
+                    print(sliderName)
+                    givenWeight = str(updated_weights.objects.get(patientID=pid, rubricRemedies=sliderName).weight)
                     result += "<div id="+zx+"><input type='range' min='0' max='5' value='"+givenWeight+"' class='slider' name='"+sliderName+"' disabled> "+givenWeight+" <div><br>"
             result += "<br><hr><br>"
         
