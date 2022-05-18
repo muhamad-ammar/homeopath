@@ -25,6 +25,7 @@ class updatedWeights(models.Model):
     age = models.CharField(max_length=100)
     gender = models.CharField(max_length=100)
     weight=models.IntegerField()
+    weightTemp=models.IntegerField()
 
 class remidieAndRuubricsRecord(models.Model):
     rubric = models.CharField(max_length=200)

@@ -502,3 +502,4 @@ def getRating(request):
         else:
             result = "No data Found" 
         return HttpResponse(result)
+

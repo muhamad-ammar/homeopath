@@ -378,7 +378,7 @@
         var col1 = currentRow.find("td:eq(0)").text();
         // var colname=col1.replace(", ","_");
         // var col= colname.replace(",","-");
-        var div1 = "<tr id=t" + me + " class='ridentifier'><td class = 'col-lg-6'>" + col1 + "<div style= 'width:100%'></div><div id=r" + me + " style='border: 1px solid; width: 60px; !important;' class='btn btn-success' onclick='show_ratings(this.id)'>RATE</div></td>";
+        var div1 = "<tr id=t" + me + " class='ridentifier'><td class = 'col-lg-6'>" + col1 + "<div style= 'width:100%'></div><div id=r" + me + " style='border: 1px solid; width: 60px; !important;' class='btn btn-success' onclick='show_ratings(this.id)'>RANK</div></td>";
         var div2 = "<td class = 'col-lg-5'><div><div style='float: left; width: 78% !important;'><input type ='text' style='width:90%' class='search-store' name=" + me + " id=s" + me + "><p style='border:1px solid grey' contentEditable='true' id=i" + me + " onkeyup='myFunction(" + me + ")'></p></div><div style='float: right; width: 18% !important'><div id=" + me + " style='border: 1px solid; width: 34px; !important;' class='btn btn-success' onclick='store(this.id)'>+</div><div id=" + me + " style='border: 1px solid; width: 34px; !important;' class='btn btn-danger' onclick='delstore(this.id)'>-</div></div><div style='clear:both'></div></div><div  id=d" + me + "></div></td></tr>";
 
         result = div1 + div2;
