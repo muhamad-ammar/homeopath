@@ -9,7 +9,7 @@ import numpy as np
 # Create your views here.
 import time
 from .forms import LoginForm, RegisterForm, searchForm,patientForm,feedbackForm
-from .models import patientData,updatedWeights,userDocData
+from .models import patientData,updatedWeights,userDocData,remidieAndRuubricsRecord
 from datetime import datetime
 from serpapi import GoogleSearch
 
@@ -48,7 +48,6 @@ def register_view(request):
             request.session['register_error'] = 1 # 1 == True
     return render(request, "signup.html", {"form": form})
 
-
 def login_view(request):
     form = LoginForm(request.POST or None)
     error=""
@@ -82,7 +81,6 @@ def Home_View(request):
 
 @login_required(login_url='login/')
 def search_view(request):
-  
     return render(request,'tab_remedy.html')
 
 def table_view(request):
@@ -278,8 +276,8 @@ def case_analysis(request):
         f=''
         return HttpResponse(htmlStr)
 
-
 def saveFeedbackForm(request):
+    global sliderNameList
     if request.method == 'GET':
         pid=request.GET
         # print(pid)
@@ -291,9 +289,12 @@ def saveFeedbackForm(request):
             feedback.rubricRemedies = x
             feedback.age = patientData.objects.get(patientID=patientID).age
             feedback.gender = patientData.objects.get(patientID=patientID).gender
-            feedback.weight = pid[x.replace(', ','_')]
+            weight = pid[x.replace(', ','_')]
+            feedback.weight = weight
             feedback.userDID = request.user.id
             feedback.save()
+
+            updateWheight(x.split('?')[1],x.split('|')[0],x.split('|')[1].split('?')[0],weight)
             
         dbpatient=patientData.objects.get(patientID=patientID)
         dbpatient.feedback = True
@@ -312,7 +313,8 @@ def patientFeedbackForm(request):
         remiesRubrics = []
         for x in patient.remedies.split('?'):
             x=x.split(':')
-            temp = [x.pop(0).split("|")[1]]
+            temp = [x.pop(0)]
+            # temp = [x.pop(0).split("|")[1]] #Old code till MD1
             for y in x[0].split('|'):
                 if y != '':
                     temp.append(y)
@@ -323,10 +325,11 @@ def patientFeedbackForm(request):
         result += "<h4 align = 'center'>Gender           : "+patient.gender+"</h4>"
         result += "<h4 align = 'center'>Age              : "+patient.age+"</h4><hr>"
         result += "<br><br><br>"
+        # print(remiesRubrics)
         for x in remiesRubrics:
             z=x.pop(0)
             zx=z.replace(', ','_')
-            result += "<h4>"+z+"</h4><br>"
+            result += "<h4>"+z.split("|")[1]+"</h4><br>"
             for y in x:
                 sliderName = zx+'?'+y
                 sliderNameList.append(sliderName.replace('_',', '))
@@ -334,7 +337,7 @@ def patientFeedbackForm(request):
                 if patient.feedback == False:
                     result += "<div id="+zx+">0 <input type='range' min='0' max='5' value='3' class='slider' name='"+sliderName+"'> 5 <div><br>"
                 else:
-                    givenWeight = str(updatedWeights.objects.get(patientID=pid, rubricRemedies=sliderName.replace('_',', ')).weight)
+                    givenWeight = str(updatedWeights.objects.get(patientID=pid, rubricRemedies=sliderName.split("|")[1].replace('_',', ')).weight)
                     result += "<div id="+zx+"><input type='range' min='0' max='5' value='"+givenWeight+"' class='slider' name='"+sliderName+"' disabled> "+givenWeight+" <div><br>"
             result += "<br><hr><br>"
         
@@ -342,7 +345,6 @@ def patientFeedbackForm(request):
             result += "<button type='submit' class='btn btn-primary' id='saveFeedback' >SAVE FEEDBACK</button>"
             
     return HttpResponse(result)
-
 
 def feedback_filter_view(request):
     global feedback_filter
@@ -397,7 +399,6 @@ def feedback_filter_view(request):
     # print("pleas4",feedNotSubmited)
     return render(request,'feedback.html',{"feedSubmited":feedSubmited,"feedNotSubmited":feedNotSubmited})
 
-
 @login_required(login_url='login/')
 def feedback_view(request):
     global feedSubmited
@@ -442,7 +443,6 @@ def feedback_view(request):
     # print(feedSubmited)
     return render(request,'feedback.html',{"feedSubmited":feedSubmited,"feedNotSubmited":feedNotSubmited,"feedSubmitedLength":len(feedSubmited),"feedNotSubmitedLength":len(feedNotSubmited)})
 
-
 def printAllDB():
     print('\n\n\n')
     for x in patientData.objects.all():
@@ -463,3 +463,42 @@ def formateTime(ptime):
         ptime += " AM"
         
     return ptime
+
+def updateWheight(remide,rubID,rubric,weight):
+    remID = getRemedyID(remide)
+    ratedData=remidieAndRuubricsRecord.objects.filter(remidieID = remID, rubricID = rubID)
+    if ratedData.count() == 1:
+        ratedData=remidieAndRuubricsRecord.objects.get(remidieID = remID, rubricID = rubID)
+        rating = float(ratedData.rating)
+        timesUsed = ratedData.timesUsed
+        ratedData.timesUsed = 1 + timesUsed
+        ratedData.rating = str((timesUsed / (timesUsed + 1)) * (rating + (int(weight) / timesUsed)))
+        ratedData.save()
+    elif ratedData.count() == 0:
+        ratedData = remidieAndRuubricsRecord()
+        ratedData.rubric = rubric
+        ratedData.remidieID = remID
+        ratedData.rubricID = rubID
+        ratedData.remidie = remide
+        ratedData.rating = weight
+        ratedData.timesUsed = 1
+        ratedData.save()
+
+def getRemedyID(remedy_string):
+    return json.loads(requests.get(f"https://www.oorep.com/api/lookup_mm?mmAbbrev=clarke&symptom=&page=0&remedyString={remedy_string}").text)['results'][0]['remedy_id']
+
+def getRating(request):
+    result=''
+    if request.method == 'GET':
+        rubID=request.GET['rubricID']
+        ratedData=remidieAndRuubricsRecord.objects.filter(rubricID = rubID).order_by('-rating')
+        if ratedData.count() > 0:
+            result += '<thead class="thead-dark"><tr></tr><th>Rubric</th><th style="white-space: nowrap;overflow:hidden;">Rating</th><th style="white-space: nowrap;overflow:hidden;">Times Used</th></tr></thead><tbody>'
+            for object in ratedData:
+                rating = float(object.rating)
+                timesUsed = object.timesUsed
+                remidie = object.remidie
+                result += f"<tr><td style='white-space: nowrap;overflow:hidden;'>{remidie}</td><td>{round(rating, 4)}</td><td>{timesUsed}</td>"
+        else:
+            result = "No data Found" 
+        return HttpResponse(result)
