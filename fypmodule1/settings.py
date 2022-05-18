@@ -89,6 +89,10 @@ DATABASES = {
         # 'default': {
         #     'ENGINE': 'django.db.backends.sqlite3',
         #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        # },
+        # 'ourRep': {
+        #     'ENGINE': 'django.db.backends.sqlite3',
+        #     'NAME': os.path.join(BASE_DIR, 'db1.sqlite3'),
         # }
     }
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
@@ -140,3 +144,5 @@ STATIC_DIR=os.path.join(BASE_DIR,'static')
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# DATABASES_ROUTERS = ['db_routers.OurRep',]

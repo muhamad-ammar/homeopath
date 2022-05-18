@@ -195,10 +195,14 @@
         
         <br>
 
-        <div><button type="button" id='mymodal' class="btn btn-success btn-md" data-toggle="modal" data-target="#myModal">Case</button></div>
+        <div><button type="button" id='mymodal' class="btn btn-success btn-md">Case</button>
+            <button type="button" id="hiddenMyModalBtn" data-toggle="modal" data-target="#myModal" hidden="hidden">
+            <button type="button" id="hiddenRatingsModalBtn" data-toggle="modal" data-target="#ratingModal" hidden="hidden"></button>
+        </div>
         <!-- {% comment %}
             <div style="!important; width:50%;"><button type="button" style="!important; text-align:right;" id='PDFmaker' class="btn btn-info btn-lg" onclick='MakePdf()'>PDF</button></div> {% endcomment %} -->
 
+        
         <!-- Modal -->
         <div class="modal fade bd-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -211,6 +215,28 @@
                     <!--Table-->
                     <div class="scrollmenu" style="!important; overflow:auto;">
                         <table id='case' class="table table-striped table-bordered"></table>
+                    </div>
+                    <!--footer-->
+                    <div class="modal-footer"></div>
+                    <div style="text-align:center">
+                        <button type="button" class="btn btn-dark" style="width:120px" data-dismiss="modal">Close</button>
+                    </div>
+                    <div style='height:10px'> </div>
+                </div>
+            </div>
+        </div>
+        <!-- Rating Modal -->
+        <div class="modal fade bd-example-modal-lg" id="ratingModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <!--Head-->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Remidie Ratings</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <!--Table-->
+                    <div class="scrollmenu" style="!important; overflow:auto;">
+                        <table id='remidieRating' class="table table-striped table-bordered"></table>
                     </div>
                     <!--footer-->
                     <div class="modal-footer"></div>
@@ -352,7 +378,7 @@
         var col1 = currentRow.find("td:eq(0)").text();
         // var colname=col1.replace(", ","_");
         // var col= colname.replace(",","-");
-        var div1 = "<tr id=t" + me + " class='ridentifier'><td class = 'col-lg-6'>" + col1 + "</td>";
+        var div1 = "<tr id=t" + me + " class='ridentifier'><td class = 'col-lg-6'>" + col1 + "<div style= 'width:100%'></div><div id=r" + me + " style='border: 1px solid; width: 60px; !important;' class='btn btn-success' onclick='show_ratings(this.id)'>RATE</div></td>";
         var div2 = "<td class = 'col-lg-5'><div><div style='float: left; width: 78% !important;'><input type ='text' style='width:90%' class='search-store' name=" + me + " id=s" + me + "><p style='border:1px solid grey' contentEditable='true' id=i" + me + " onkeyup='myFunction(" + me + ")'></p></div><div style='float: right; width: 18% !important'><div id=" + me + " style='border: 1px solid; width: 34px; !important;' class='btn btn-success' onclick='store(this.id)'>+</div><div id=" + me + " style='border: 1px solid; width: 34px; !important;' class='btn btn-danger' onclick='delstore(this.id)'>-</div></div><div style='clear:both'></div></div><div  id=d" + me + "></div></td></tr>";
 
         result = div1 + div2;
@@ -439,9 +465,9 @@
             },
             success: function(data) {
                 $("#case").html(data);
+                document.getElementById("hiddenMyModalBtn").click();
             }
         });
-
     });
 </script>
 <script>
@@ -499,6 +525,24 @@
             }
         }) {% endcomment %}
 
+    }
+</script>
+<script>
+    function show_ratings(divID){
+        divID = divID.substring(1);
+        $.ajax({
+            type: 'GET',
+            url: "{% url 'getRating' %}",
+            data: {
+                'rubricID': divID,
+
+
+            },
+            success: function(data) {
+                $("#remidieRating").html(data);
+                document.getElementById("hiddenRatingsModalBtn").click();
+            }
+        });
     }
 </script>
 <script>
