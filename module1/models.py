@@ -18,7 +18,7 @@ class patientData(models.Model):
     gender = models.CharField(max_length=100)
     feedback=models.BooleanField(default=0)
     
-class updatedWeights(models.Model):
+class updated_weights(models.Model):
     userDID = models.CharField(max_length=100)
     patientID = models.CharField(max_length=100)
     rubricRemedies = models.CharField(max_length=200)
