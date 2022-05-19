@@ -127,7 +127,7 @@ left: 0px;
                         <td><input type ='text' style="border-radius:25px; margin: 0 5px;" name="pageFilter" id="pageFilter" placeholder="Age"></input></td>
                         <td><input type ='date' style="border-radius:25px; margin: 0 5px;" name='date' id="pdateFilter"></input></td>
                         <td>
-                            <button class='btn btn-danger' style="margin-left: 15px; padding: 2px 12px;" type="submit" >{% if submit_btn %} {{ submit_btn }} {% else %}Filter{% endif %}</button>
+                            <button class='btn btn-danger' style="margin-left: 15px; padding: 2px 12px;" type="button" id="patientFilterBtn">Filter</button>
                         </td>
                     </tr>
                 </table>
@@ -161,7 +161,7 @@ left: 0px;
                                     <div class="abc"><input type='submit' class='btn btn-danger'  id='{{x.3}}' value='Add feedback' name='Hello'></div>
                                 </td>
                             </tr>
-                            {% endfor %}
+                        {% endfor %}
                         </tbody> 
                     </table>
                 </div>
@@ -400,7 +400,7 @@ $.ajax({
 </script>
 <script>
 
-$('#patientFilter').submit(function() {
+$('#patientFilterBtn').click(function() {
     // get all the inputs into an array.
     var $inputs = $('#patientFilter :input');
     // not sure if you wanted this, but I thought I'd add it.
@@ -424,7 +424,8 @@ $('#patientFilter').submit(function() {
             
         },
         success: function (data) {
-            console.log('success');
+            document.getElementById("tbody2").innerHTML = data.feedSubmited
+            document.getElementById("tbody1").innerHTML = data.feedNotSubmited
         }
     });
 });
