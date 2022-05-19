@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-hlpaqcxrflie+k80h9ej1#=2$fe39ltma*jgehe4*g!*dk2gr*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['fyphomeopath.herokuapp.com', '127.0.0.1']
+ALLOWED_HOSTS = ['fyphomeopath.herokuapp.com','ehomeopathic.herokuapp.com', '127.0.0.1']
 
 
 # Application definition
@@ -78,6 +78,14 @@ WSGI_APPLICATION = 'fypmodule1.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 LOGIN_REDIRECT_URL = 'main/index'
 DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.postgresql_psycopg2', 
+#             'NAME': 'd7sbn8f98tqf72',                      
+#             'USER': 'nahlfitgnepsii',
+#             'PASSWORD': '451e92cc989e33576f650344c2eeaed12f2b57a2a2befca526d43485089aa987',
+#             'HOST': 'ec2-52-50-171-4.eu-west-1.compute.amazonaws.com',                      
+#             'PORT': '5432',                      
+#         }
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2', 
             'NAME': 'd6vi2uqapn44f6',                      
