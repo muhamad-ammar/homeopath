@@ -20,7 +20,6 @@ rubricsWithIds ={}
 sliderNameList = []
 feedSubmited = []
 feedNotSubmited = []
-feedback_filter = False
 
 def register_view(request):
     form = RegisterForm(request.POST or None)
@@ -81,6 +80,7 @@ def Home_View(request):
 
 @login_required(login_url='login/')
 def search_view(request):
+    # setFeedbackStatusFalse()
     return render(request,'tab_remedy.html')
 
 def table_view(request):
@@ -92,7 +92,7 @@ def table_view(request):
         key_s=request.GET
         keyword=key_s['inputValue']
         response = requests.get(f'https://www.oorep.com/api/lookup_rep?symptom={keyword}&repertory=kent&page=0&remedyString=&minWeight=0&getRemedies=1')
-        print("table_view:",response.status_code)
+        # print("table_view:",response.status_code)
         if response.status_code == 204:
             result = "noResults"
             try:
@@ -280,6 +280,7 @@ def saveFeedbackForm(request):
     global sliderNameList
     if request.method == 'GET':
         pid=request.GET
+        print(sliderNameList)
         # print(pid)
         patientID = sliderNameList.pop(0)
         # print(patientID)
@@ -289,7 +290,7 @@ def saveFeedbackForm(request):
             feedback.rubricRemedies = x
             feedback.age = patientData.objects.get(patientID=patientID).age
             feedback.gender = patientData.objects.get(patientID=patientID).gender
-            weight = pid[x.replace(', ','_')]
+            weight = pid[x]
             feedback.weight = weight
             feedback.userDID = request.user.id
             feedback.save()
@@ -298,7 +299,7 @@ def saveFeedbackForm(request):
             
         dbpatient=patientData.objects.get(patientID=patientID)
         dbpatient.feedback = True
-        dbpatient.save(update_fields=["feedback"])        
+        dbpatient.save(update_fields=["feedback"])
         
     return redirect(feedback_view)
 
@@ -307,7 +308,7 @@ def patientFeedbackForm(request):
     global sliderNameList
     if request.method == 'GET':
         pid=request.GET['inputValue']
-        print("PUD ====== ",pid)
+        # print("PUD ====== ",pid)
         sliderNameList = [pid]
         patient = patientData.objects.get(patientID=pid)
         name,date,ptime = pid.split('%')
@@ -338,7 +339,7 @@ def patientFeedbackForm(request):
                 if patient.feedback == False:
                     result += "<div id="+zx+">0 <input type='range' min='0' max='5' value='3' class='slider' name='"+sliderName+"'> 5 <div><br>"
                 else:
-                    print(sliderName)
+                    # print(sliderName)
                     givenWeight = str(updated_weights.objects.get(patientID=pid, rubricRemedies=sliderName).weight)
                     result += "<div id="+zx+"><input type='range' min='0' max='5' value='"+givenWeight+"' class='slider' name='"+sliderName+"' disabled> "+givenWeight+" <div><br>"
             result += "<br><hr><br>"
@@ -349,14 +350,9 @@ def patientFeedbackForm(request):
     return HttpResponse(result)
 
 def feedback_filter_view(request):
-    global feedback_filter
-    global feedSubmited
-    global feedNotSubmited
-    feedSubmited = []
-    feedNotSubmited = []
-    feedback_filter = True
     if request.method == 'GET':
-        
+        feedSubmited = ""
+        feedNotSubmited = ""
         inputData=[]
         patient=patientData.objects.all()
         for x in request.GET['inputValue'].split(','):
@@ -382,30 +378,25 @@ def feedback_filter_view(request):
         # print(str(request.user.id))
         
         for dat in patient:
-            patientarr=[]
             pid=dat.patientID
             page=dat.age
-            flag=dat.feedback
+            pFlag = dat.feedback
             patient_name,date,ptime=pid.split('%')
-            patientarr.append(patient_name)
-            patientarr.append(date)
-            patientarr.append(flag)
-            patientarr.append(pid)
-            patientarr.append(formateTime(ptime))
-            patientarr.append(page)
-            if dat.feedback == False:
-                feedNotSubmited.append(patientarr)
-            if dat.feedback == True:
-                feedSubmited.append(patientarr)
+            if pFlag:
+                feedSubmited += f"<tr><td >{patient_name}</td><td >{date}</td><td >{formateTime(ptime)}</td><td >{page}</td><td id='useless'><div class='abc'>"
+                feedSubmited += f"<input type='submit' class='btn btn-danger'  id='{pid}' value='Add feedback' name='Hello'></div></td></tr>"
+            else:
+                feedNotSubmited += f"<tr><td >{patient_name}</td><td >{date}</td><td >{formateTime(ptime)}</td><td >{page}</td><td id='useless'><div class='abc'>"
+                feedNotSubmited += f"<input type='submit' class='btn btn-danger'  id='{pid}' value='Add feedback' name='Hello'></div></td></tr>"
         
-    # print("pleas4",feedNotSubmited)
-    return render(request,'feedback.html',{"feedSubmited":feedSubmited,"feedNotSubmited":feedNotSubmited})
+        # print("pleas4",feedNotSubmited)
+        json_data = '{"feedSubmited":"'+feedSubmited+'","feedNotSubmited":"'+feedNotSubmited+'"}'
+        return HttpResponse(json_data, content_type="application/json")
 
 @login_required(login_url='login/')
 def feedback_view(request):
     global feedSubmited
     global feedNotSubmited
-    global feedback_filter
 
     # print(str(request.user.id))
     # patient=patientData.objects.all()
@@ -415,30 +406,27 @@ def feedback_view(request):
     # print('some       ',feedback_filter,'hm')
     # print(feedNotSubmited)
     
-    if feedback_filter == False:
-        feedSubmited = []
-        feedNotSubmited = []
-        for dat in patient:
-            # print(str(request.user.id) == dat.userDID)
-            # print(dat.userDID)
-            patientarr=[]
-            pid=dat.patientID
-            flag=dat.feedback
-            page=dat.age
-            patient_name,date,ptime=pid.split('%')
-            patientarr.append(patient_name)
-            patientarr.append(date)
-            patientarr.append(flag)
-            patientarr.append(pid)
-            patientarr.append(formateTime(ptime))
-            patientarr.append(page)
-            # print(dat.feedback," ",type(dat.feedback))
-            if dat.feedback == False:
-                feedNotSubmited.append(patientarr)
-            if dat.feedback == True:
-                feedSubmited.append(patientarr)
-    else:
-        feedback_filter = False
+    feedSubmited = []
+    feedNotSubmited = []
+    for dat in patient:
+        # print(str(request.user.id) == dat.userDID)
+        # print(dat.userDID)
+        patientarr=[]
+        pid=dat.patientID
+        flag=dat.feedback
+        page=dat.age
+        patient_name,date,ptime=pid.split('%')
+        patientarr.append(patient_name)
+        patientarr.append(date)
+        patientarr.append(flag)
+        patientarr.append(pid)
+        patientarr.append(formateTime(ptime))
+        patientarr.append(page)
+        # print(dat.feedback," ",type(dat.feedback))
+        if dat.feedback == False:
+            feedNotSubmited.append(patientarr)
+        if dat.feedback == True:
+            feedSubmited.append(patientarr)
         
     # print('some   ok    ',feedback_filter,'hm')
     # print(feedNotSubmited)
@@ -467,7 +455,11 @@ def formateTime(ptime):
     return ptime
 
 def updateWheight(remide,rubID,rubric,weight):
+
     remID = getRemedyID(remide)
+    if(remID == False):
+        return
+
     ratedData=remidieAndRuubricsRecord.objects.filter(remidieID = remID, rubricID = rubID)
     if ratedData.count() == 1:
         ratedData=remidieAndRuubricsRecord.objects.get(remidieID = remID, rubricID = rubID)
@@ -487,7 +479,10 @@ def updateWheight(remide,rubID,rubric,weight):
         ratedData.save()
 
 def getRemedyID(remedy_string):
-    return json.loads(requests.get(f"https://www.oorep.com/api/lookup_mm?mmAbbrev=clarke&symptom=&page=0&remedyString={remedy_string}").text)['results'][0]['remedy_id']
+    response =requests.get(f"https://www.oorep.com/api/lookup_mm?mmAbbrev=clarke&symptom=&page=0&remedyString={remedy_string}")
+    if response.status_code == 204:
+        return False
+    return response.json()['results'][0]['remedy_id']
 
 def getRating(request):
     result=''
@@ -505,3 +500,9 @@ def getRating(request):
             result = "No data Found" 
         return HttpResponse(result)
 
+def setFeedbackStatusFalse():
+    patientdata = patientData.objects.all()
+    for object in patientdata:
+        dbpatient=patientData.objects.get(patientID=object.patientID)
+        dbpatient.feedback = False
+        dbpatient.save(update_fields=["feedback"])
