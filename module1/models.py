@@ -30,6 +30,6 @@ class remidieAndRuubricsRecord(models.Model):
     rubric = models.CharField(max_length=200)
     remidieID = models.CharField(max_length=100)
     rubricID = models.CharField(max_length=100)
-    remidie = models.CharField(max_length=100)
+    remedy = models.CharField(max_length=100)
     rating = models.CharField(max_length=100)
     timesUsed = models.IntegerField()

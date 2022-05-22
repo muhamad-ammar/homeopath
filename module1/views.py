@@ -494,8 +494,8 @@ def getRating(request):
             for object in ratedData:
                 rating = float(object.rating)
                 timesUsed = object.timesUsed
-                remidie = object.remidie
-                result += f"<tr><td style='white-space: nowrap;overflow:hidden;'>{remidie}</td><td>{round(rating, 4)}</td><td>{timesUsed}</td>"
+                remedy = object.remedy
+                result += f"<tr><td style='white-space: nowrap;overflow:hidden;'>{remedy}</td><td>{round(rating, 4)}</td><td>{timesUsed}</td>"
         else:
             result = "No data Found" 
         return HttpResponse(result)
