@@ -1,7 +1,6 @@
 from ast import Pass
 from django import forms
 from django.contrib.auth import get_user_model
-from bootstrap_datepicker_plus import DatePickerInput
 
 
 non_allowed_usernames = ['abc']

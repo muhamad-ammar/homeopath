@@ -82,6 +82,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" defer></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous" defer></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous" defer></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900">
@@ -297,13 +300,40 @@
 <div class="right-sec">
     <div class="container">
         <br>
-        <div class="col-md-12 col-lg-12 col-xl-12 mx-auto">
+        <div class="col-12 mx-auto">
             <form id='form'>
-                <div style="float: left;" class="col-lg-8 col-md-8 col-sm-12">
-                    <input type="text" id='keyword' placeholder="e.g. Vomit" class="form-control form-rounded" style="border-radius:30px;border:1px solid grey;width: 100%;">
-                </div>
-                <div style="float: left;" class="col-lg-3 col-md-3 col-sm-10">
-                    <button type='submit' id='btn' class="btn-success" style="border-radius: 30px ;padding:5px 20px; font-weight: 400;">Find</button>
+                <div style="float: left;display: flex;flex-direction: row" class="col-11">
+                    <div class="dropdown" style="display:flex;flex-direction:row;">
+                        <div style="height: 24px;width:24px; margin: 6px 4px;">
+                            <img class="dropdown-icon" style="max-width:100%;max-height:100%;" src=''/>
+                        </div>
+                        <button class="btn btn-success" data-toggle="dropdown" type="button" id="dropdownMenuButton" 
+                        aria-haspopup="true" aria-expanded="false" style="border:1px solid grey;border-radius: 8px 0 0 8px;width: 150px;">
+                            Select
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <div class="dropdown-item" style="display:flex;flex-direction:row;">
+                                <div class="dropdown-item-icon" style="height: 24px;width:24px; margin-right: 4px;">
+                                    <img src="" style="max-width:100%;max-height:100%;"/>
+                                </div>
+                                <span class="dropdown-item-text">Select</span>
+                            </div>
+                            <div class="dropdown-item" style="display:flex;flex-direction:row;">
+                                <div class="dropdown-item-icon" style="height: 24px;width:24px; margin-right: 4px;">
+                                    <img src="https://res.cloudinary.com/hpath/image/upload/v1660993573/hpath/7783520_bpmoyi.jpg" style="max-width:100%;max-height:100%;"/>
+                                </div>
+                                <span class="dropdown-item-text">Heart</span>
+                            </div>
+                            <div class="dropdown-item" style="display:flex;flex-direction: row;">
+                                <div class="dropdown-item-icon" style="height: 24px;width:24px; margin-right: 4px;">
+                                    <img src="https://res.cloudinary.com/hpath/image/upload/v1660996384/hpath/head_xdlqxc.png" style="max-width:100%;max-height:100%;"/>
+                                </div>
+                                <span class="dropdown-item-text">Head</span>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="text" id='keyword' placeholder="e.g. Vomit" class="form-control form-rounded" style="border-radius: 0px; border:1px solid grey;width: 100%;">
+                    <button type='submit' id='btn' class="btn-success" style="border-radius: 0 8px 8px 0; padding:5px 20px; font-weight: 400; width: 150px;border:1px solid grey;width: 150px;">Find</button>
                 </div>
                 <div style="clear: both;"></div>
 
@@ -362,6 +392,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 {% comment %}
 <script>
     var objDiv = document.getElementById("modal-table-div");
@@ -418,7 +449,11 @@
 
     $(document).on('submit', '#form', function(e) {
 
-        var input = $('#keyword').val();
+        var input = $("#dropdownMenuButton").text() + ' ';
+        if(input == "Select ")
+            input = '';
+
+        input = input + $('#keyword').val();
         document.getElementById("noResult").innerHTML = "";
         document.getElementById("googleResult").innerHTML = "";
 
@@ -775,6 +810,13 @@
 </script> {% endcomment %}
 <script>
     document.getElementById('pdateInHeader').value = new Date().toISOString().substring(0, 10);
+    $(function(){
+        $(".dropdown-item").click(function(){
+            console.log();
+            $(".dropdown-icon").attr('src', $(this).children(".dropdown-item-icon").children("img").attr('src'));
+            $("#dropdownMenuButton").text($(this).children(".dropdown-item-text").text());
+        });
+    });
 </script>
 {% comment %}
 <script>

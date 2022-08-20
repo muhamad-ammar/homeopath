@@ -1,9 +1,7 @@
-from os import name
 from django.contrib import admin
-from django.urls import path,re_path
+from django.urls import path
 
 from django.contrib.auth.views import LogoutView
-from django.conf.urls import url
 from .views import feedback_view, login_view, logout_view,Home_View, register_view,search_view,table_view,submit_view,repo_view,saveFeedbackForm,patientFeedbackForm,feedback_filter_view,case_analysis,getRating
 
 urlpatterns = [
