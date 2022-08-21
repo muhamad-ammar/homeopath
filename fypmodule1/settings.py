@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-hlpaqcxrflie+k80h9ej1#=2$fe39ltma*jgehe4*g!*dk2gr*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['fyphomeopath.herokuapp.com','ehomeopathic.herokuapp.com', '127.0.0.1']
+ALLOWED_HOSTS = ['fyphomeopath.herokuapp.com','ehomeopathic.herokuapp.com', '127.0.0.1', 'e-hpath.herokuapp.com']
 
 
 # Application definition
