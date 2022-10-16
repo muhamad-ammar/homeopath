@@ -78,26 +78,34 @@ WSGI_APPLICATION = 'fypmodule1.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 LOGIN_REDIRECT_URL = 'main/index'
 DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.postgresql_psycopg2', 
-#             'NAME': 'd7sbn8f98tqf72',                      
-#             'USER': 'nahlfitgnepsii',
-#             'PASSWORD': '451e92cc989e33576f650344c2eeaed12f2b57a2a2befca526d43485089aa987',
-#             'HOST': 'ec2-52-50-171-4.eu-west-1.compute.amazonaws.com',                      
-#             'PORT': '5432',                      
-#         }
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2', 
-            'NAME': 'd6vi2uqapn44f6',                      
-            'USER': 'fbsfnfiymvsogu',
-            'PASSWORD': '98fa991ea27f7a5324f42f95e3ae2e9effdf7e5e44ac67b69e04ffd043f87c59',
-            'HOST': 'ec2-52-86-115-245.compute-1.amazonaws.com',                      
-            'PORT': '5432',                      
-        }
+        # 'default': {
+        #     'ENGINE': 'django.db.backends.postgresql_psycopg2', 
+        #     'NAME': 'd7sbn8f98tqf72',                      
+        #     'USER': 'nahlfitgnepsii',
+        #     'PASSWORD': '451e92cc989e33576f650344c2eeaed12f2b57a2a2befca526d43485089aa987',
+        #     'HOST': 'ec2-52-50-171-4.eu-west-1.compute.amazonaws.com',                      
+        #     'PORT': '5432',                      
+        # }
+        # 'default': {
+        #     'ENGINE': 'django.db.backends.postgresql_psycopg2', 
+        #     'NAME': 'd6vi2uqapn44f6',                      
+        #     'USER': 'fbsfnfiymvsogu',
+        #     'PASSWORD': '98fa991ea27f7a5324f42f95e3ae2e9effdf7e5e44ac67b69e04ffd043f87c59',
+        #     'HOST': 'ec2-52-86-115-245.compute-1.amazonaws.com',                      
+        #     'PORT': '5432',                      
+        # }
         # 'default': {
         #     'ENGINE': 'django.db.backends.sqlite3',
         #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         # }
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2', 
+            'NAME': 'd890isi4qek4gp',                      
+            'USER': 'ecieitetotsqdc',
+            'PASSWORD': '93d381169a1b0af604a5851fc8f8649b9678e85ab43a48c558d8d978f1fc4a4d',
+            'HOST': 'ec2-52-49-120-150.eu-west-1.compute.amazonaws.com',                      
+            'PORT': '5432',                      
+        }
     }
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
